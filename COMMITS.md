@@ -1,12 +1,12 @@
 #Commits
--Interface menu : TODO\n
--Fonction tuto :\n
-  -fait la fonction\n
-  -modifié ligne "XXX"\n
--Lv1 : TODO\n
--Lv2 : TODO\n
--Lv3 : TODO\n
--Survival : TODO\n
--Best : Fait le 04/03 par Quentin et Antoine\n
-  -A faire : affichage desdits scores\n
--Paramètres : TODO\n
+-Interface menu : TODO
+-Fonction tuto :
+  -fait la fonction
+  -modifié ligne "XXX"
+-Lv1 : TODO
+-Lv2 : TODO
+-Lv3 : TODO
+-Survival : TODO
+-Best : Fait le 04/03 par Quentin et Antoine
+  -A faire : affichage desdits scores
+-Paramètres : TODO
