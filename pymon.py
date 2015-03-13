@@ -2,6 +2,15 @@
 
 from tkinter import * #Interface
 
+##Définitions des fonctions permettant de définir l'OS de l'utilisateur
+def OSchosenWin():
+    OSWin=True
+    return OSWin
+    
+def OSchosenUnix():
+    OSWin=False
+    return OSWin
+
 ##Création de l'interface graphique du Menu principal
 
 def menu():
@@ -9,35 +18,47 @@ def menu():
     #Création de la fenêtre
     menu=Tk()
     menu.title("Pymon")
-    menu.geometry("500x300")
+    menu.geometry("350x260")
     
     #Création de chaque bouton
     title=Label(menu,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
-    title.grid(sticky=N+S+E+W,row=1,column=2,columnspan=3)
+    title.pack(fill=BOTH)
     
     tuto=Button(menu,text="Tutoriel")
-    tuto.grid(sticky=N+S+E+W,row=3,column=2,columnspan=3)
+    tuto.pack(fill=BOTH)
+    
+    lvs=Label(menu,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
+    lvs.pack(fill=BOTH)
     
     lv1=Button(menu,text="Niveau 1")
-    lv1.grid(sticky=N+S+E+W,row=5,column=2,columnspan=3)
+    lv1.pack(fill=BOTH)
     
     lv2=Button(menu,text="Niveau 2")
-    lv2.grid(sticky=N+S+E+W,row=6,column=2,columnspan=3)
+    lv2.pack(fill=BOTH)
     
     lv3=Button(menu,text="Niveau 3")
-    lv3.grid(sticky=N+S+E+W,row=7,column=2,columnspan=3)
+    lv3.pack(fill=BOTH)
+    
+    danger=Label(menu,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
+    danger.pack(fill=BOTH)
     
     survival=Button(menu,text="Survival !")
-    survival.grid(sticky=N+S+E+W,row=9,column=2,columnspan=3)
+    survival.pack(fill=BOTH)
+    
+    separation=Label(menu,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
+    separation.pack(fill=BOTH)
     
     menuBest=Button(menu,text="Meilleurs scores",command=bestScore)
-    menuBest.grid(sticky=N+S+E+W,row=11,column=2,columnspan=3)
+    menuBest.pack(fill=BOTH)
     
     settings=Button(menu,text="Paramètres")
-    settings.grid(sticky=N+S+E+W,row=13,column=2,columnspan=3)
+    settings.pack(fill=BOTH)
     
     commands=Label(menu,text="Touches : QSDFJKLM",fg='grey')
-    commands.grid(sticky=S+W,row=15,column=1)
+    commands.pack(fill=BOTH)
+    
+    vide=Label(menu,text="",anchor=CENTER,justify=CENTER)
+    vide.pack(fill=BOTH)
     
     #Lancement de la fenêtre
     menu.mainloop()
@@ -46,10 +67,35 @@ def menu():
 
 def bestScore():
     best=open("best.txt","r")
-    highscore=best.readlines()
+    highscore=best.readlines() #TODO : réussir a faire une liste avec les meilleurs scores
     print("Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival")
     print(highscore)
     
-##Lancement du programme
+##Définition du launcher
 
-menu()
+#Définition d'une fenêtre qui demande a l'utilisateur son OS et adapte la librairie en fonction
+def launch():
+    
+    #Définition de la fenêtre
+    launcher=Tk()
+    launcher.title("Pymon launcher")
+    launcher.geometry("229x64")
+    
+    #Définition des boutons. Ils doivent prendre toute la fenêtre donc pack() est plus utile
+    OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
+    OSquestion.pack(fill=BOTH)
+    
+    unixButton=Button(launcher,text="Windows",command=OSchosenWin)
+    unixButton.pack(fill=BOTH)
+    
+    winButton=Button(launcher,text="UNIX",command=OSchosenUnix)
+    winButton.pack(fill=BOTH)
+    
+    #Lancement du launcher
+    launcher.mainloop()
+    
+    #Lancement du menu
+    menu()
+
+#Lancement du programme
+launch()
