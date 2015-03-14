@@ -75,9 +75,17 @@ def bestScore():
     phraseHS=Label(displayHS,text="Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival :")
     phraseHS.pack(fill=BOTH)
     
-    printHighscore=Listbox(displayHS) #La on a l'emplacement pour la liste, reste plus qu'a afficher ladite liste "highscore"
-    printHighscore.get(0,END)
+    printHighscore=Listbox(displayHS)
+    
+    listHS=len(highscore)
+    i=1
+    
+    while i<=listHS:
+        printHighscore.insert(i,highscore[i])
+        i+=1
     printHighscore.pack(fill=BOTH)
+    
+    displayHS.mainloop()
     
 ##Définition du launcher
 
