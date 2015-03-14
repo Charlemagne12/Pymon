@@ -18,7 +18,7 @@ def menu():
     #Création de la fenêtre
     menu=Tk()
     menu.title("Pymon")
-    menu.geometry("350x260")
+    menu.geometry("350x290")
     
     #Création de chaque bouton
     title=Label(menu,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
@@ -66,10 +66,18 @@ def menu():
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
 def bestScore():
+    
     best=open("best.txt","r")
-    highscore=best.readlines() #TODO : réussir a faire une liste avec les meilleurs scores
-    print("Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival")
-    print(highscore)
+    highscore=best.readlines()
+    
+    displayHS=Tk()
+    
+    phraseHS=Label(displayHS,text="Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival :")
+    phraseHS.pack(fill=BOTH)
+    
+    printHighscore=Listbox(displayHS) #La on a l'emplacement pour la liste, reste plus qu'a afficher ladite liste "highscore"
+    printHighscore.get(0,END)
+    printHighscore.pack(fill=BOTH)
     
 ##Définition du launcher
 
@@ -79,7 +87,7 @@ def launch():
     #Définition de la fenêtre
     launcher=Tk()
     launcher.title("Pymon launcher")
-    launcher.geometry("229x64")
+    launcher.geometry("250x75")
     
     #Définition des boutons. Ils doivent prendre toute la fenêtre donc pack() est plus utile
     OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
