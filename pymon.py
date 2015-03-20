@@ -101,10 +101,10 @@ def launch():
     OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
     OSquestion.pack(fill=BOTH)
     
-    unixButton=Button(launcher,text="Windows",command=OSchosenWin)
+    unixButton=Button(launcher,text="Windows",command=OSchosenWin and launcher.destroy)
     unixButton.pack(fill=BOTH)
     
-    winButton=Button(launcher,text="UNIX",command=OSchosenUnix)
+    winButton=Button(launcher,text="UNIX",command=OSchosenUnix and launcher.destroy)
     winButton.pack(fill=BOTH)
     
     #Lancement du launcher
