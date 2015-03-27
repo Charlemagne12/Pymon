@@ -43,52 +43,49 @@ def launch():
 def menu():
     
     #Création de la fenêtre
-    menu=Tk()
-    menu.title("Pymon")
-    menu.geometry("350x290")
+    menuWindow=Tk()
+    menuWindow.title("Pymon")
+    menuWindow.geometry("350x290")
     
     #Création de chaque bouton
-    title=Label(menu,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
+    title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
     title.pack(fill=BOTH)
     
-    tuto=Button(menu,text="Tutoriel")
+    tuto=Button(menuWindow,text="Tutoriel")
     tuto.pack(fill=BOTH)
     
-    lvs=Label(menu,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
+    lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
     lvs.pack(fill=BOTH)
     
-    lv1=Button(menu,text="Niveau 1")
+    lv1=Button(menuWindow,text="Niveau 1")
     lv1.pack(fill=BOTH)
     
-    lv2=Button(menu,text="Niveau 2")
+    lv2=Button(menuWindow,text="Niveau 2")
     lv2.pack(fill=BOTH)
     
-    lv3=Button(menu,text="Niveau 3")
+    lv3=Button(menuWindow,text="Niveau 3")
     lv3.pack(fill=BOTH)
     
-    danger=Label(menu,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
+    danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
     danger.pack(fill=BOTH)
     
-    survival=Button(menu,text="Survival !")
+    survival=Button(menuWindow,text="Survival !")
     survival.pack(fill=BOTH)
     
-    separation=Label(menu,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
+    separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
     separation.pack(fill=BOTH)
     
-    menuBest=Button(menu,text="Meilleurs scores",command=bestScore)
+    menuBest=Button(menuWindow,text="Meilleurs scores",command=bestScore)
     menuBest.pack(fill=BOTH)
     
-    settings=Button(menu,text="Paramètres")
-    settings.pack(fill=BOTH)
-    
-    commands=Label(menu,text="Touches : QSDFJKLM",fg='grey')
+    commands=Label(menuWindow,text="Touches : QSDFJKL",fg='grey')
     commands.pack(fill=BOTH)
     
-    vide=Label(menu,text="",anchor=CENTER,justify=CENTER)
+    vide=Label(menuWindow,text="",anchor=CENTER,justify=CENTER)
     vide.pack(fill=BOTH)
     
     #Lancement de la fenêtre
-    menu.mainloop()
+    menuWindow.mainloop()
     
 ## Choix aléatoire d'un nombre puis d'une note
 
@@ -106,7 +103,7 @@ def note():
     
     # Réponse de l'utilisateur
     
-    r=input('donner la lettre correspondant à cette note : ')
+    r=input('donner la lettre correspondant à cett note : ')
     if keyboard==r :
         print('bravo')
     else :
@@ -120,6 +117,7 @@ def bestScore():
     highscore=best.readlines()
     
     displayHS=Tk()
+    displayHS.title("Pymon - Meilleurs scores")
     
     phraseHS=Label(displayHS,text="Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival :")
     phraseHS.pack(fill=BOTH)
@@ -127,12 +125,17 @@ def bestScore():
     printHighscore=Listbox(displayHS)
     
     listHS=len(highscore)
-    i=1
+    i=0
     
-    while i<=listHS:
+    for i in range(listHS):
         printHighscore.insert(i,highscore[i])
         i+=1
     printHighscore.pack(fill=BOTH)
+    
+    menuBack=Button(displayHS,text="Retour au menu",command=menu and displayHS.destroy)
+    menuBack.pack(fill=BOTH)
+    
+    best.close()
     
     displayHS.mainloop()
     
