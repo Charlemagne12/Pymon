@@ -1,6 +1,7 @@
 ##Importation des modules
 
 from tkinter import * #Interface
+from random import * #Aleatoire
 
 ##Définitions des fonctions permettant de définir l'OS de l'utilisateur
 def OSchosenWin():
@@ -10,6 +11,32 @@ def OSchosenWin():
 def OSchosenUnix():
     OSWin=False
     return OSWin
+
+##Définition du launcher
+
+#Définition d'une fenêtre qui demande a l'utilisateur son OS et adapte la librairie en fonction
+def launch():
+    
+    #Définition de la fenêtre
+    launcher=Tk()
+    launcher.title("Pymon launcher")
+    launcher.geometry("250x75")
+    
+    #Définition des boutons. Ils doivent prendre toute la fenêtre donc pack() est plus utile
+    OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
+    OSquestion.pack(fill=BOTH)
+    
+    unixButton=Button(launcher,text="Windows",command=OSchosenWin and launcher.destroy)
+    unixButton.pack(fill=BOTH)
+    
+    winButton=Button(launcher,text="UNIX",command=OSchosenUnix and launcher.destroy)
+    winButton.pack(fill=BOTH)
+    
+    #Lancement du launcher
+    launcher.mainloop()
+    
+    #Lancement du menu
+    menu()
 
 ##Création de l'interface graphique du Menu principal
 
@@ -62,6 +89,28 @@ def menu():
     
     #Lancement de la fenêtre
     menu.mainloop()
+    
+## Choix aléatoire d'un nombre puis d'une note
+
+def note():
+    note=['do.mp3','re.mp3','mi.mp3','fa.mp3','sol.mp3','la.mp3','si.mp3']
+    clavier=['q','s','d','f','j','k','l']
+    c=randrange(6)
+    keyboard=clavier[c]
+    
+    #fin fonction programme - Début aide diagnostique
+    
+    print (c)
+    print(note[c])
+    print(keyboard)
+    
+    # Réponse de l'utilisateur
+    
+    r=input('donner la lettre correspondant à cette note : ')
+    if keyboard==r :
+        print('bravo')
+    else :
+        print('hiiinnn faux')
 
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
@@ -87,56 +136,7 @@ def bestScore():
     
     displayHS.mainloop()
     
-##Définition du launcher
-
-#Définition d'une fenêtre qui demande a l'utilisateur son OS et adapte la librairie en fonction
-def launch():
-    
-    #Définition de la fenêtre
-    launcher=Tk()
-    launcher.title("Pymon launcher")
-    launcher.geometry("250x75")
-    
-    #Définition des boutons. Ils doivent prendre toute la fenêtre donc pack() est plus utile
-    OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
-    OSquestion.pack(fill=BOTH)
-    
-    unixButton=Button(launcher,text="Windows",command=OSchosenWin and launcher.destroy)
-    unixButton.pack(fill=BOTH)
-    
-    winButton=Button(launcher,text="UNIX",command=OSchosenUnix and launcher.destroy)
-    winButton.pack(fill=BOTH)
-    
-    #Lancement du launcher
-    launcher.mainloop()
-    
-    #Lancement du menu
-    menu()
-
-#Lancement du programme
+########################
+#Lancement du programme#
+########################
 launch()
-
-## Choix aléatoire d)un no,bre puis d'une note
-
-
-note=['do.mp3','re.mp3','mi.mp3','fa.mp3','sol.mp3','la.mp3','si.mp3']
-
-clavier=['q','s','d','f','j','k','l']
-
-c=randrange(6)
-
-keyboard=clavier[c]
-
-#fin fonction programme - Début aide diagnostique
-
-print (c)
-print(note[c])
-print(keyboard)
-
-## Réponse de l'utilisateur
-
-r=input('donner la lettre correspondant à cett note : ')
-if keyboard==r :
-    print('bravo')
-else :
-    print('hiiinnn faux')
