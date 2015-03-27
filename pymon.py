@@ -115,3 +115,28 @@ def launch():
 
 #Lancement du programme
 launch()
+
+## Choix aléatoire d)un no,bre puis d'une note
+
+
+note=['do.mp3','re.mp3','mi.mp3','fa.mp3','sol.mp3','la.mp3','si.mp3']
+
+clavier=['q','s','d','f','j','k','l']
+
+c=randrange(6)
+
+keyboard=clavier[c]
+
+#fin fonction programme - Début aide diagnostique
+
+print (c)
+print(note[c])
+print(keyboard)
+
+## Réponse de l'utilisateur
+
+r=input('donner la lettre correspondant à cett note : ')
+if keyboard==r :
+    print('bravo')
+else :
+    print('hiiinnn faux')
