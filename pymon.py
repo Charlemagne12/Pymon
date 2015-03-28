@@ -143,3 +143,29 @@ def bestScore():
 #Lancement du programme#
 ########################
 launch()
+
+###### ajouts Quentin ######
+import winsound
+
+def note():
+    note=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
+    clavier=['q','s','d','f','j','k','l']
+    c=randrange(6)
+    keyboard=clavier[c]
+    winsound.PlaySound(note [c],winsound.SND_FILENAME)
+    
+    #fin fonction programme - Début aide diagnostique
+    
+    print (c)
+    print(note[c])
+    print(keyboard)
+    
+    # Réponse de l'utilisateur
+    
+    reponse=input('donner la lettre correspondant à cett note : ')
+    if keyboard==r :
+        print('bravo')
+    else :
+        print('hiiinnn faux')
+
+######              ######
