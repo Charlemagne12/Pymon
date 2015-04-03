@@ -156,11 +156,10 @@ def bestScore():
     #Boucle pour afficher chaque élément de highscore dans la listbox
     for i in range(listHS):
         printHighscore.insert(i,highscore[i])
-        i+=1
     printHighscore.pack(fill=BOTH)
     
     #Bouton de retour au menu
-    menuBack=Button(displayHS,text="Retour au menu",command=menu and displayHS.destroy,bg="grey",activebackground=grisClair)
+    menuBack=Button(displayHS,text="Retour au menu",command=displayHS.destroy,bg="grey",activebackground=grisClair)
     menuBack.pack(fill=BOTH)
     
     #Fermeture du fichier
