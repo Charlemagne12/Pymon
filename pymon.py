@@ -38,20 +38,26 @@ def launch():
     launcher=Tk()
     launcher.title("Pymon launcher")
     
-    def launcherClose():   #Afin de fermer la fenêtre en ouvrant le menu, on doit définir une fonction codant pour ça, sinon on doit
-        launcher.destroy() #coder la fermeture de la fenêtre en tant que commande sur le bouton, mais dans ce cas là, le menu doit s'ouvrir
-        menu()             #en fin de fonction car on ne peut pas mettre plus de deux commandes sur un bouton.
-                           #On pouvait donc quitter le launcher sans choisir d'OS et le programme se lance quand même.
+    def launcherClose():
+        launcher.destroy()
+        menu()
+
+#Afin de fermer la fenêtre en ouvrant le menu, on doit définir une fonction codant pour ça, sinon on doit
+#coder la fermeture de la fenêtre en tant que commande sur le bouton, mais dans ce cas là, on doit mettre "menu()"
+#en fin de fonction car on ne peut pas mettre plus de deux commandes sur un bouton.
+#On pouvait donc quitter le launcher sans choisir d'OS et le menu se lance quand même.
     
     #Définition des boutons. Ils doivent prendre toute la fenêtre donc pack() est plus utile
     OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
     OSquestion.pack(fill=BOTH)
     
     unixButton=Button(launcher,text="Windows",command=OSchosenWin and launcherClose,bg="blue",activebackground=bleuClair) 
-    unixButton.pack(fill=BOTH)                                                                 #Ainsi, l'utilisateur ne peut pas lancer le
-                                                                                               #programme sans choisir d'OS. Il peut quitter
-                                                                                               #le launcher, mais dans ce cas le programme
-                                                                                               #s'arrête.
+    unixButton.pack(fill=BOTH)
+    
+#Ainsi, l'utilisateur ne peut pas lancer le programme sans choisir d'OS 
+#(grâce a la fonction launcherClose que l'on vient de créer).
+#Il peut quitter le launcher manuellement, mais dans ce cas le programme s'arrête.
+
     winButton=Button(launcher,text="UNIX",command=OSchosenUnix and launcherClose,bg="orange",activebackground=orangeClair)
     winButton.pack(fill=BOTH)
     
@@ -95,8 +101,8 @@ def menu():
     separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
     separation.pack(fill=BOTH)
     
-    menuBest=Button(menuWindow,text="Meilleurs scores",command=bestScore,bg="grey",activebackground=grisClair)
-    menuBest.pack(fill=BOTH)
+    survivalScore=Button(menuWindow,text="Scores du Survival",command=survivalScoreFunc,bg="grey",activebackground=grisClair)
+    survivalScore.pack(fill=BOTH)
     
     commands=Label(menuWindow,text="Touches : QSDFJKL",fg='grey')
     commands.pack(fill=BOTH)
@@ -109,106 +115,54 @@ def menu():
     
 ## Choix aléatoire d'un nombre puis d'une note
 
-def note():
-    note=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav'] #TODO : corriger les chemins
-    clavier=['q','s','d','f','j','k','l']
-    c=randrange(6)
-    keyboard=clavier[c]
-    winsound.PlaySound(note [c],winsound.SND_FILENAME)
+
+
+##Création de la fonction du déblocage des niveaux
+
+def unlock():
     
-    #fin fonction programme - Début aide diagnostique
-    
-    print (c)
-    print(note[c])
-    print(keyboard)
-    
-    # Réponse de l'utilisateur
-    
-    reponse=input('donner la lettre correspondant à cett note : ')
-    if keyboard==r :
-        print('bravo') #TODO : faire une fenêtre, c'est mieux
-    else :
-        print('hiiinnn faux')
-    
-    #TODO : ajouter dans la liste la touche et le son, histoire d'avoir la série de notes.
+    unlock=open("data/unlock.txt")
+    checking=unlock.readlines()
+    global unlockingStatus
+    unlockingStatus=checking[1]+checking[2]+checking[3]
 
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
-def bestScore():
+def survivalScoreFunc():
     
     #Ouverture du fichier
-    best=open("best.txt","r")
-    highscore=best.readlines() #"highscore" est une liste qui compte chaque ligne comme un élément de la liste
+    survivalScore=open("data/survivalScore.txt","r")
+    listScore=survivalScore.readlines() #"listScore" est une liste qui compte chaque ligne comme un élément de la liste
     
     #Création de la fenêtre
-    displayHS=Tk()
-    displayHS.title("Pymon - Meilleurs scores")
+    displayScore=Tk()
+    displayScore.title("Pymon - Scores du Survival")
     
-    phraseHS=Label(displayHS,text="Ceci sont les meilleurs scores obtenus par les joueurs sur le Survival :")
-    phraseHS.pack(fill=BOTH)
+    phraseScore=Label(displayScore,text="Ceci sont les scores obtenus par les joueurs sur le Survival :")
+    phraseScore.pack(fill=BOTH)
     
     #Création de la listbox pour afficher les scores
-    printHighscore=Listbox(displayHS)
+    printScore=Listbox(displayScore)
     
-    listHS=len(highscore) #Définition de la variable correspondant a la longueur de la liste highscore
+    sizeListScore=len(listScore) #Définition de la variable correspondant a la longueur de la liste listScore
     i=0
     
-    #Boucle pour afficher chaque élément de highscore dans la listbox
-    for i in range(listHS):
-        printHighscore.insert(i,highscore[i])
-    printHighscore.pack(fill=BOTH)
+    #Boucle pour afficher chaque élément de listScore dans la listbox
+    for i in range(sizeListScore):
+        printScore.insert(i,listScore[i])
+    printScore.pack(fill=BOTH)
     
     #Bouton de retour au menu
-    menuBack=Button(displayHS,text="Retour au menu",command=displayHS.destroy,bg="grey",activebackground=grisClair)
+    menuBack=Button(displayScore,text="Retour au menu",command=displayScore.destroy,bg="grey",activebackground=grisClair)
     menuBack.pack(fill=BOTH)
     
     #Fermeture du fichier
-    best.close()
+    survivalScore.close()
     
     #Lancement de la fenêtre
-    displayHS.mainloop()
+    displayScore.mainloop()
     
 ########################
 #Lancement du programme#
 ########################
 launch()
-
-######### Ajouts Quentin ##########
-
-def note ():
-    NoteHistory=[] #liste répertoriant les notes sortie
-    KbHistory=[] #liste répertoriant les keyboard sortie
-    RepHistory=[] # Liste répertoriant les réponses utilisateur
-    score=0
-    
-    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
-    listKeyboard=['q','s','d','f','j','k','l']
-    
-    for i in range (3): # J'ai lis 3 mais cela dépend du lvl ;)
-        c=randrange(6)
-        NoteHistory.append(listNote[c])
-        KbHistory.append(listKeyboard[c])
-        
-        winsound.PlaySound(listNote [c],winsound.SND_FILENAME)
-    
-    #fin fonction programme - Début aide diagnostique
- 
-    print(NoteHistory)
-    print(KbHistory)
-    
-    RepHistory=list(input('donner la lettre correspondant à cett note : '))
-    
-    print(NoteHistory)
-    print(KbHistory)
-    print(RepHistory)
-    
-    for j in range (3):
-        if KbHistory[j]==RepHistory[j] :
-            print('bravo')
-            score=score+100
-    #mettre 'reponse' das la liste 'RepHistory' 
-        # 'h' is not defined elif h==RepHistory[i] :
-            #print(NoteHistory[j])
-        else :
-            #créer une fenetre pour game over
-    print (score)
