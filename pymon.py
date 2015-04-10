@@ -166,3 +166,43 @@ def survivalScoreFunc():
 #Lancement du programme#
 ########################
 launch()
+def note ():
+    z=0
+    NoteHistory=[] #liste répertoriant les notes sortie
+    KbHistory=[] #liste répertoriant les keyboard sortie
+    RepHistory=[] # Liste répertoriant les réponses utilisateur
+    score=0
+    
+    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
+    listKeyboard=['q','s','d','f','k','l','m']
+    while !=
+    for i in range (3): # suivant la difficulté changer le 3 #
+        c=randrange(6)
+        NoteHistory.append(listNote[c])
+        KbHistory.append(listKeyboard[c])
+        
+        while z!=i+1 :
+            print (NoteHistory[z])
+            #winsound.PlaySound(NoteHistory [z],winsound.SND_FILENAME)
+            z=z+1
+
+    #fin fonction programme - Début aide diagnostique
+    
+    print(NoteHistory)
+    print(KbHistory)
+    
+    RepHistory=list(input('donner la lettre correspondant à cett note : '))
+    
+    #print(NoteHistory)
+    #print(KbHistory)
+    print(RepHistory)
+    
+    for j in range (3):
+        if KbHistory[j]==RepHistory[j] :
+            print('bravo')
+            score=score+100
+        else :
+            print('hiiin faux')
+            #créer une fenetre pour game over
+    print (score)
+    #if score>=1100:
