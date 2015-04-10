@@ -172,3 +172,43 @@ def bestScore():
 #Lancement du programme#
 ########################
 launch()
+
+######### Ajouts Quentin ##########
+
+def note ():
+    NoteHistory=[] #liste répertoriant les notes sortie
+    KbHistory=[] #liste répertoriant les keyboard sortie
+    RepHistory=[] # Liste répertoriant les réponses utilisateur
+    score=0
+    
+    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
+    listKeyboard=['q','s','d','f','j','k','l']
+    
+    for i in range (3): # J'ai lis 3 mais cela dépend du lvl ;)
+        c=randrange(6)
+        NoteHistory.append(listNote[c])
+        KbHistory.append(listKeyboard[c])
+        
+        winsound.PlaySound(listNote [c],winsound.SND_FILENAME)
+    
+    #fin fonction programme - Début aide diagnostique
+ 
+    print(NoteHistory)
+    print(KbHistory)
+    
+    RepHistory=list(input('donner la lettre correspondant à cett note : '))
+    
+    print(NoteHistory)
+    print(KbHistory)
+    print(RepHistory)
+    
+    for j in range (3):
+        if KbHistory[j]==RepHistory[j] :
+            print('bravo')
+            score=score+100
+    #mettre 'reponse' das la liste 'RepHistory' 
+        # 'h' is not defined elif h==RepHistory[i] :
+            #print(NoteHistory[j])
+        else :
+            #créer une fenetre pour game over
+    print (score)
