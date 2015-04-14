@@ -167,7 +167,6 @@ def survivalScoreFunc():
 ########################
 launch()
 def note ():
-    z=0
     NoteHistory=[] #liste répertoriant les notes sortie
     KbHistory=[] #liste répertoriant les keyboard sortie
     RepHistory=[] # Liste répertoriant les réponses utilisateur
@@ -175,34 +174,88 @@ def note ():
     
     listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
     listKeyboard=['q','s','d','f','k','l','m']
-    while !=
+
     for i in range (3): # suivant la difficulté changer le 3 #
+        z=0
         c=randrange(6)
         NoteHistory.append(listNote[c])
         KbHistory.append(listKeyboard[c])
         
         while z!=i+1 :
             print (NoteHistory[z])
-            #winsound.PlaySound(NoteHistory [z],winsound.SND_FILENAME)
+            winsound.PlaySound(NoteHistory [z],winsound.SND_FILENAME)
             z=z+1
-
+        print(NoteHistory)
+        print(KbHistory)
+        RepHistory=list(input('donner la lettre correspondant à cett note : '))
+        for j in range (i): # Le décompte des points n'est pas au point 
+            if KbHistory[j]==RepHistory[j] :
+                print('bravo')
+                score=score+100
+            else :
+                print('hiiin faux')
+                #créer une fenetre pour game over
+        print (score)
     #fin fonction programme - Début aide diagnostique
-    
-    print(NoteHistory)
-    print(KbHistory)
-    
-    RepHistory=list(input('donner la lettre correspondant à cett note : '))
     
     #print(NoteHistory)
     #print(KbHistory)
-    print(RepHistory)
+    #print(RepHistory)
     
-    for j in range (3):
-        if KbHistory[j]==RepHistory[j] :
+    #for j in range (2):
+        #if KbHistory[j]==RepHistory[j] :
+            #print('bravo')
+            #score=score+100
+        #else :
+            #print('hiiin faux')
+            #créer une fenetre pour game over
+    #print (score)
+    #if score>=1100:
+
+
+## le tuto
+def tutoriel ():
+    NoteHistory=[]
+    KbHistory=[]
+    RepHistory=[]
+    score=0
+    
+    print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
+    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, j, k, l")
+    print ("et bien commençons sans tarder")
+    for c in range (6):
+        listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
+        listTuto=['do','re','mi','fa','sol','la','si']
+        listKeyboard=['q','s','d','f','j','k','l']
+        winsound.PlaySound(listNote[c],winsound.SND_FILENAME)
+        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c])
+    
+    #fin fonction programme - Début aide diagnostique
+    
+        print (c)
+    
+    # Réponse de l'utilisateur
+    
+        reponse=input('donner la lettre correspondant à cett note : ')
+        if listKeyboard[c]==reponse :
             print('bravo')
+        else :
+            print('hiiinnn faux')
+        
+    print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
+    for c in range (6):
+        winsound.PlaySound(listNote[c],winsound.SND_FILENAME)
+        NoteHistory.append(listNote[c])
+        KbHistory.append(listKeyboard[c])
+    
+    RepHistory=list(input('donner la lettre correspondant à cett note : '))
+    
+    for j in range (6):
+        if KbHistory[j]==RepHistory[j] :
+            #print('bravo')
             score=score+100
         else :
-            print('hiiin faux')
+            print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
+            menu()
             #créer une fenetre pour game over
     print (score)
-    #if score>=1100:
