@@ -162,6 +162,30 @@ def survivalScoreFunc():
     #Lancement de la fenêtre
     displayScore.mainloop()
     
+##Fenêtres de Game Over et de Level Complete
+
+def gameOver():
+    
+    gameOverWindow=Tk()
+    gameOverWindow.title("Pymon - Game Over !")
+    
+    gameOverMessage1=Label(gameOverWindow,text="-=-=-=-=-=- GAME OVER -=-=-=-=-=-",bg=rougeClair)
+    gameOverMessage1.pack(fill=BOTH)
+    
+    gameOverMessage2=Label(gameOverWindow,text="Raté ! Vous n'avez pas rentré la bonne suite de notes.",bg=rougeClair)
+    gameOverMessage2.pack(fill=BOTH)
+    
+def levelComplete():
+    
+    levelCompleteWindow=Tk()
+    levelCompleteWindow.title("Pymon - Niveau réussi !")
+    
+    levelCompleteMessage1=Label(levelCompleteWindow,text="-=-=-=-=-=- LEVEL COMPLETE -=-=-=-=-=-",bg=vertClair)
+    levelCompleteMessage1.pack(fill=BOTH)
+    
+    levelCompleteMessage2=Label(levelCompleteWindow,text="Vous avez réussi le niveau ! Félicitations ! Vous pouvez passer au suivant.",bg=vertClair)
+    levelCompleteMessage2.pack(fill=BOTH)
+    
 ########################
 #Lancement du programme#
 ########################
