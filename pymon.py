@@ -191,6 +191,9 @@ def levelComplete():
 ########################
 launch()
 
+
+############ Ajouts Quentin ##############
+
 def note (nb): # Nombre de note à la fin du niveau
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
@@ -280,3 +283,45 @@ def tutoriel ():
             menu()
             #créer une fenetre pour game over
     print ('bravo vous pouvez ainsi passer à la suite bonne chance :P')
+
+
+##### la fonction unlock et son compléments 
+
+import pickle
+ 
+# A la fin du niveau 
+a, b, c = 1,1,1 # Un exemple de qq'un qui a débloqué le niveau trois 
+f = open('fichierUnlock', 'wb')
+
+# Exporte dans le fichier les types et valeurs de a, b, c
+pickle.dump(a, f)
+pickle.dump(b, f)
+pickle.dump(c, f)
+
+f.close()
+
+ # Le tutoriel est le lvl 0 et si on veut bloquer le survival il faut modifier le bloc unlock
+def unlock (lvl):
+# Lis les trois variable mis dans 'fichierUnlock'
+    f = open('fichierUnlock', 'rb')
+    
+    j = pickle.load(f)
+    k = pickle.load(f)
+    l = pickle.load(f)
+    
+    f.close()
+    
+# Aide diagnostique
+    print(j)
+    print(k)
+    print(l)
+
+    print (j+k+l)
+
+    verrou=j+k+l
+    
+    if lvl <= verrou :
+        print ('bonne chance pour le lvl', lvl)
+        #lancer le lv
+    else :
+        print ("Vous n'êtes pas assez expérimenté pour faire se niveau faites les niveau inférieurs")
