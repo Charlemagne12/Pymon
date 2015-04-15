@@ -166,51 +166,50 @@ def survivalScoreFunc():
 #Lancement du programme#
 ########################
 launch()
-def note ():
-    NoteHistory=[] #liste répertoriant les notes sortie
-    KbHistory=[] #liste répertoriant les keyboard sortie
-    RepHistory=[] # Liste répertoriant les réponses utilisateur
-    score=0
-    
-    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
-    listKeyboard=['q','s','d','f','k','l','m']
 
-    for i in range (3): # suivant la difficulté changer le 3 #
-        z=0
+def note (nb): # Nombre de note à la fin du niveau
+    NoteHistory=[] #Liste répertoriant les notes sortie
+    KbHistory=[] #Liste répertoriant les keyboard sortie
+    RepHistory=[] # Liste répertoriant les réponses utilisateur
+    score=0 # Assez explicite 
+    
+    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav'] # Fichier audio pouvant sortir
+    listKeyboard=['q','s','d','f','k','l','m'] # Lettres associés
+
+    for i in range (nb): # suivant la difficulté changer le 3 #
+    # Variable servant aux boucke while plus bas    
+        sound=0
+        check=0
+       
+    # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
         c=randrange(6)
         NoteHistory.append(listNote[c])
         KbHistory.append(listKeyboard[c])
+    
+    # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
+        while sound!=i+1 :
+            print (NoteHistory[sound]) # A enlever aide au diagnostique #
+            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+            sound=sound+1
+        print(NoteHistory) # A enlever aide au diagnostique #
+        print(KbHistory) # A enlever aide au diagnostique #
         
-        while z!=i+1 :
-            print (NoteHistory[z])
-            winsound.PlaySound(NoteHistory [z],winsound.SND_FILENAME)
-            z=z+1
-        print(NoteHistory)
-        print(KbHistory)
+    # Demande une réponse à l'utilisateur que le prog met dans une liste
         RepHistory=list(input('donner la lettre correspondant à cett note : '))
-        for j in range (i): # Le décompte des points n'est pas au point 
-            if KbHistory[j]==RepHistory[j] :
-                print('bravo')
-                score=score+100
+        
+    # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
+        while check!=i+1 : # Le décompte des points n'est pas au point 
+            if KbHistory[check]==RepHistory[check] :
+                print('bravo') # A enlever le bravo fait tache #
+                score=score+100 # Attribution du score afin de débloquer les niveau suivants 
+                check=check+1
             else :
-                print('hiiin faux')
+                print ('hiiiinn faut')
                 #créer une fenetre pour game over
-        print (score)
-    #fin fonction programme - Début aide diagnostique
-    
-    #print(NoteHistory)
-    #print(KbHistory)
-    #print(RepHistory)
-    
-    #for j in range (2):
-        #if KbHistory[j]==RepHistory[j] :
-            #print('bravo')
-            #score=score+100
-        #else :
-            #print('hiiin faux')
-            #créer une fenetre pour game over
-    #print (score)
-    #if score>=1100:
+                menu () # Fin du jeu à la moindre erreur car se jeu est pour les winners
+    print ('Bravo vous avez fait un score de',score)
+
+
 
 
 ## le tuto
@@ -218,7 +217,6 @@ def tutoriel ():
     NoteHistory=[]
     KbHistory=[]
     RepHistory=[]
-    score=0
     
     print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
     print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, j, k, l")
@@ -253,9 +251,8 @@ def tutoriel ():
     for j in range (6):
         if KbHistory[j]==RepHistory[j] :
             #print('bravo')
-            score=score+100
         else :
             print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
             menu()
             #créer une fenetre pour game over
-    print (score)
+    print ('bravo vous pouvez ainsi passer à la suite bonne chance :P')
