@@ -8,7 +8,8 @@
 
 from tkinter import * #Interface
 from random import * #Aleatoire
-from winsound import * #Lecture des sons
+import winsound #Lecture des sons
+import pickle # Permet la fonction 'lock' et 'unlock'
 
 ##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
 grisClair="#dedede"
@@ -287,21 +288,21 @@ def tutoriel ():
 
 ##### la fonction unlock et son compléments 
 
-import pickle
+
  
-# A la fin du niveau 
-a, b, c = 1,1,1 # Un exemple de qq'un qui a débloqué le niveau trois 
-f = open('fichierUnlock', 'wb')
+# A la fin du niveau
+def unlock (a, b, c): # 'a, b, c' sont des 0 ou 1 permettant de déterminer si le joueur a fais les lvl précédents (si survival bloquer il faut rajouter un 'd' 
+    f = open('fichierUnlock', 'wb')
 
-# Exporte dans le fichier les types et valeurs de a, b, c
-pickle.dump(a, f)
-pickle.dump(b, f)
-pickle.dump(c, f)
+    # Exporte dans le fichier les types et valeurs de a, b, c
+    pickle.dump(a, f)
+    pickle.dump(b, f)
+    pickle.dump(c, f)
 
-f.close()
+    f.close()
 
  # Le tutoriel est le lvl 0 et si on veut bloquer le survival il faut modifier le bloc unlock
-def unlock (lvl):
+def lock (lvl):
 # Lis les trois variable mis dans 'fichierUnlock'
     f = open('fichierUnlock', 'rb')
     
