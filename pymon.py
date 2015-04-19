@@ -195,51 +195,6 @@ launch()
 
 ############ Ajouts Quentin ##############
 
-def note (nb): # Nombre de note à la fin du niveau
-    NoteHistory=[] #Liste répertoriant les notes sortie
-    KbHistory=[] #Liste répertoriant les keyboard sortie
-    RepHistory=[] # Liste répertoriant les réponses utilisateur
-    score=0 # Assez explicite 
-    
-    listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav'] # Fichier audio pouvant sortir
-    listKeyboard=['q','s','d','f','k','l','m'] # Lettres associés
-
-    for i in range (nb): # suivant la difficulté changer le 3 #
-    # Variable servant aux boucke while plus bas    
-        sound=0
-        check=0
-       
-    # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
-        c=randrange(6)
-        NoteHistory.append(listNote[c])
-        KbHistory.append(listKeyboard[c])
-    
-    # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
-        while sound!=i+1 :
-            print (NoteHistory[sound]) # A enlever aide au diagnostique #
-            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
-            sound=sound+1
-        print(NoteHistory) # A enlever aide au diagnostique #
-        print(KbHistory) # A enlever aide au diagnostique #
-        
-    # Demande une réponse à l'utilisateur que le prog met dans une liste
-        RepHistory=list(input('donner la lettre correspondant à cett note : '))
-        
-    # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
-        while check!=i+1 : # Le décompte des points n'est pas au point 
-            if KbHistory[check]==RepHistory[check] :
-                print('bravo') # A enlever le bravo fait tache #
-                score=score+100 # Attribution du score afin de débloquer les niveau suivants 
-                check=check+1
-            else :
-                print ('hiiiinn faut')
-                #créer une fenetre pour game over
-                menu () # Fin du jeu à la moindre erreur car se jeu est pour les winners
-    print ('Bravo vous avez fait un score de',score)
-
-
-
-
 ## le tuto
 def tutoriel ():
     NoteHistory=[]
@@ -284,24 +239,38 @@ def tutoriel ():
             menu()
             #créer une fenetre pour game over
     print ('bravo vous pouvez ainsi passer à la suite bonne chance :P')
+    unlock (1, 0, 0, 0)
+    
+
+####### voici le bloc important de notre programme #######
+
+## Squellette
+    # Les differentes listes de références suivant les niveau ( à mettre juste après les importations )
+listNote_tuto=['sons/tuto_do.wav','sons/tuto_re.wav','sons/tuto_mi.wav','sons/tuto_fa.wav','sons/tuto_sol.wav','sons/tuto_la.wav','sons/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
+listNote_lvl1=['sons/lvl1_do.wav','sons/lvl1_re.wav','sons/lvl1_mi.wav','sons/lvl1_fa.wav','sons/lvl1_sol.wav','sons/lvl1_la.wav','sons/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
+listNote_lvl2=['sons/lvl2_do.wav','sons/lvl2_re.wav','sons/lvl2_mi.wav','sons/lvl2_fa.wav','sons/lvl2_sol.wav','sons/lvl2_la.wav','sons/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
+listNote_lvl3=['sons/lvl3_do.wav','sons/lvl3_re.wav','sons/lvl3_mi.wav','sons/lvl3_fa.wav','sons/lvl3_sol.wav','sons/lvl3_la.wav','sons/lvl3_si.wav'] # Fichier audio pouvant sortir au lvl 3
+listNote_sur=['sons/sur_do.wav','sons/sur_re.wav','sons/sur_mi.wav','sons/sur_fa.wav','sons/sur_sol.wav','sons/sur_la.wav','sons/sur_si.wav'] # Fichier audio pouvant sortir au survival
+    # Les différentes touches qui seront liés plus tard aux notes
+listKeyboard=['q','s','d','f','k','l','m']
 
 
-##### la fonction unlock et son compléments 
 
 
- 
+## Fonction lock et unlock
+
 # A la fin du niveau
-def unlock (a, b, c): # 'a, b, c' sont des 0 ou 1 permettant de déterminer si le joueur a fais les lvl précédents (si survival bloquer il faut rajouter un 'd' 
+def unlock (a, b, c, d): # 'a, b, c, d' sont des 0 ou 1 permettant de déterminer si le joueur a fais les lvl précédents (survival et le lvl 4)
+
     f = open('fichierUnlock', 'wb')
 
-    # Exporte dans le fichier les types et valeurs de a, b, c
     pickle.dump(a, f)
     pickle.dump(b, f)
     pickle.dump(c, f)
-
+    pickle.dump(c, f)
     f.close()
 
- # Le tutoriel est le lvl 0 et si on veut bloquer le survival il faut modifier le bloc unlock
+
 def lock (lvl):
 # Lis les trois variable mis dans 'fichierUnlock'
     f = open('fichierUnlock', 'rb')
@@ -309,6 +278,7 @@ def lock (lvl):
     j = pickle.load(f)
     k = pickle.load(f)
     l = pickle.load(f)
+    h = pickle.load(f)
     
     f.close()
     
@@ -316,13 +286,67 @@ def lock (lvl):
     print(j)
     print(k)
     print(l)
+    print(h)
 
-    print (j+k+l)
+    print (j+k+l+h)
 
-    verrou=j+k+l
+    verrou=j+k+l+h
     
     if lvl <= verrou :
         print ('bonne chance pour le lvl', lvl)
         #lancer le lv
     else :
-        print ("Vous n'êtes pas assez expérimenté pour faire se niveau faites les niveau inférieurs")
+        print ("Vous n'êtes pas assez expérimenté pour faire se niveau, faites les niveau inférieurs")
+        menu ()
+
+
+## Fonction note
+
+def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de note pour le lvl
+    
+    NoteHistory=[] #Liste répertoriant les notes sortie
+    KbHistory=[] #Liste répertoriant les keyboard sortie
+    RepHistory=[] # Liste répertoriant les réponses utilisateur
+    score=0 # Assez explicite 
+    
+
+    for i in range (nb): # suivant la difficulté changer le 3 #
+    # Variable servant aux boucke while plus bas    
+        sound=0
+        check=0
+       
+    # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
+        c=randrange(6)
+        NoteHistory.append(ref [c])
+        KbHistory.append(listKeyboard[c])
+    
+    # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
+        while sound!=i+1 :
+            print (NoteHistory[sound]) # A enlever aide au diagnostique #
+            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+            sound=sound+1
+        print(NoteHistory) # A enlever aide au diagnostique #
+        print(KbHistory) # A enlever aide au diagnostique #
+        
+    # Demande une réponse à l'utilisateur que le prog met dans une liste
+        RepHistory=list(input('donner la lettre correspondant à cett note : '))
+        
+    # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
+        while check!=i+1 : # Le décompte des points n'est pas au point 
+            if KbHistory[check]==RepHistory[check] :
+                print('bravo') # A enlever le bravo fait tache #
+                score=score+100 # Attribution du score afin de débloquer les niveau suivants 
+                check=check+1
+            else :
+                print ('hiiiinn faut')
+                #créer une fenetre pour game over
+                menu () # Fin du jeu à la moindre erreur car se jeu est pour les winners
+    print ('Bravo vous avez fait un score de',score) #todo : la limite de score au cas ou le joueur parvient à la fin avec beaucoup d'aides
+
+
+## Fonction des niveaux
+
+def lvl (lvl, ref, nb, a, b, c, d): 
+    lock (lvl)
+    note (ref, nb)
+    unlock (a, b ,c, d)
