@@ -1,4 +1,5 @@
-Répartition des tâches :
+# Répartition des tâches :
+
 launcher : fait
 menu : fait par Antoine
 levels (sons) : A faire par Quentin
