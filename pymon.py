@@ -64,10 +64,71 @@ def launch():
     #Lancement du launcher
     launcher.mainloop()
 
-##Création de l'interface graphique du Menu principal
+##Création de la fonction a invoquer en cas de niveau bloqué : une fenêtre avec un message d'erreur.
+
+def unlockError():
+    unlockingError=Tk()
+    unlockingError.title("Pymon - Erreur !")
+    
+    unlockingErrorMessage=Label(unlockingError,text="Veuillez finir le niveau précédent avant !",bg=rougeClair)
+    unlockingErrorMessage.pack(fill=BOTH)
+
+##Création du Menu Principal
 
 def menu():
     
+    #Vérification du déblocage des niveaux a l'aide d'un fichier
+    unlock=open("data/unlock.txt","r")
+    unlockingStatus=unlock.readline()
+    unlockingStatus=int(unlockingStatus)
+    
+    #Initialisation des variables
+    level1Unlock=False
+    level2Unlock=False
+    level3Unlock=False
+    
+    #Paramétrage des variables
+    if unlockingStatus==0:
+        level1Unlock=False
+        level2Unlock=False
+        level3Unlock=False
+    elif unlockingStatus==1:
+        level1Unlock=True
+        level2Unlock=False
+        level3Unlock=False
+    elif unlockingStatus==2:
+        level1Unlock=True
+        level2Unlock=True
+        level3Unlock=False
+    elif unlockingStatus==3:
+        level1Unlock=True
+        level2Unlock=True
+        level3Unlock=True
+    else:
+        print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
+        
+    #Ces fonctions sont appellées par les boutons pour le déblocage des niveaux.
+    #Au départ, nous avions fait une fonction qui prenait des paramètres, mais ça ne fonctionnait pas
+    #avec le command des boutons de Tkinter. Il a donc fallu faire des fonctions sans paramètres
+    #qui vérifient si telles variables sont True ou False et agit en fonction.
+    def unlockLevel1():
+        if level1Unlock==True:
+            print("Level 1 Unlock") #todo: virer cette phrase de test quand on aura tout et lancer le niveau
+        else:
+            unlockError()
+    
+    def unlockLevel2():
+        if level2Unlock==True:
+            print("Level 2 Unlock") #todo: virer cette phrase de test quand on aura tout
+        else:
+            unlockError()
+    
+    def unlockLevel3():
+        if level3Unlock==True:
+            print("Level 3 Unlock") #todo: virer cette phrase de test quand on aura tout
+        else:
+            unlockError()
+        
     #Création de la fenêtre
     menuWindow=Tk()
     menuWindow.title("Pymon")
@@ -83,13 +144,13 @@ def menu():
     lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
     lvs.pack(fill=BOTH)
     
-    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair,command=unlock(1))
+    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair,command=unlockLevel1)
     lv1.pack(fill=BOTH)
     
-    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair,command=unlock(2))
+    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair,command=unlockLevel2)
     lv2.pack(fill=BOTH)
     
-    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair,command=unlock(3))
+    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair,command=unlockLevel3)
     lv3.pack(fill=BOTH)
     
     danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
@@ -112,35 +173,6 @@ def menu():
     
     #Lancement de la fenêtre
     menuWindow.mainloop()
-    
-## Choix aléatoire d'un nombre puis d'une note
-
-#TODO
-
-##Création de la fonction du déblocage des niveaux
-#TODO
-
-def unlockError():
-    unlockingError=Tk()
-    unlockingError.title("Pymon - Erreur !")
-    
-    unlockingErrorMessage=Label(unlockingError,text="Veuillez finir le niveau précédent avant !",bg=rougeClair)
-    unlockingErrorMessage.pack(fill=BOTH)
-    
-    unlockingError.mainloop()
-
-def unlock(lvl):
-    
-    unlock=open("data/unlock.txt","r")
-    unlockingStatus=unlock.readline()
-    unlockingStatus=int(unlockingStatus)
-    
-    if lvl>unlockingStatus:
-        unlockError()
-    else:
-        print("bravo")
-    
-    unlock.close()
 
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
@@ -178,7 +210,7 @@ def survivalScoreFunc():
     #Lancement de la fenêtre
     displayScore.mainloop()
     
-##Fenêtres de Game Over et de Level Complete
+##Fenêtres de Game Over et de Level Complete et de Try Again
 
 def gameOver():
     
@@ -191,6 +223,8 @@ def gameOver():
     gameOverMessage2=Label(gameOverWindow,text="Raté ! Vous n'avez pas rentré la bonne suite de notes.",bg=rougeClair)
     gameOverMessage2.pack(fill=BOTH)
     
+    gameOverWindow.mainloop()
+    
 def levelComplete():
     
     levelCompleteWindow=Tk()
@@ -201,6 +235,21 @@ def levelComplete():
     
     levelCompleteMessage2=Label(levelCompleteWindow,text="Vous avez réussi le niveau ! Félicitations ! Vous pouvez passer au suivant.",bg=vertClair)
     levelCompleteMessage2.pack(fill=BOTH)
+    
+    levelCompleteWindow.mainloop()
+    
+def tryAgain():
+    
+    tryAgainWindow=Tk()
+    tryAgainWindow.title("Pymon - Score insuffisant !")
+    
+    tryAgainMessage1=Label(tryAgainWindow,text="Vous avez réussi le niveau !",bg=jauneClair)
+    tryAgainMessage1.pack(fill=BOTH)
+    
+    tryAgainMessage2=Label(tryAgainWindow,text="La prochaine fois, faites le avec moins de jokers, cependant.",bg=jauneClair)
+    tryAgainMessage2.pack(fill=BOTH)
+    
+    tryAgainWindow.mainloop()
     
 ########################
 #Lancement du programme#
@@ -247,8 +296,8 @@ def tutoriel ():
     
     for j in range (6):
         if KbHistory[j]==RepHistory[j] :
-            #print('bravo')
-        else :
+            print('bravo')
+        else:
             print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
             menu()
             #créer une fenetre pour game over
@@ -305,7 +354,7 @@ def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de 
                 print('bravo') # A enlever le bravo fait tache #
                 score=score+100 # Attribution du score afin de débloquer les niveau suivants 
                 check=check+1
-            else :
+            else:
                 print ('hiiiinn faut')
                 #créer une fenetre pour game over
                 menu () # Fin du jeu à la moindre erreur car se jeu est pour les winners
@@ -315,6 +364,4 @@ def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de 
 ## Fonction des niveaux
 
 def lvl (lvl, ref, nb): 
-    lock (lvl)
     note (ref, nb)
-    unlock (lvl)
