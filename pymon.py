@@ -239,7 +239,7 @@ def tutoriel ():
             menu()
             #créer une fenetre pour game over
     print ('bravo vous pouvez ainsi passer à la suite bonne chance :P')
-    unlock (1, 0, 0, 0)
+    unlock (0)
     
 
 ####### voici le bloc important de notre programme #######
@@ -259,42 +259,32 @@ listKeyboard=['q','s','d','f','k','l','m']
 
 ## Fonction lock et unlock
 
-# A la fin du niveau
-def unlock (a, b, c, d): # 'a, b, c, d' sont des 0 ou 1 permettant de déterminer si le joueur a fais les lvl précédents (survival et le lvl 4)
+## Fonction lock et unlock
 
+# A la fin du niveau
+def unlock (lvl):
+    verrou = lvl+1 # variable permettant de vérifier si le joueur a fais les lvl précédents (survival et le lvl 4)
     f = open('fichierUnlock', 'wb')
 
-    pickle.dump(a, f)
-    pickle.dump(b, f)
-    pickle.dump(c, f)
-    pickle.dump(c, f)
+    pickle.dump(verrou, f)
+
     f.close()
 
 
 def lock (lvl):
-# Lis les trois variable mis dans 'fichierUnlock'
+# Lis l variable variable mis dans 'fichierUnlock'
     f = open('fichierUnlock', 'rb')
     
-    j = pickle.load(f)
-    k = pickle.load(f)
-    l = pickle.load(f)
-    h = pickle.load(f)
+    verrou = pickle.load(f)
     
     f.close()
     
 # Aide diagnostique
-    print(j)
-    print(k)
-    print(l)
-    print(h)
-
-    print (j+k+l+h)
-
-    verrou=j+k+l+h
+    print(verrou)
     
     if lvl <= verrou :
         print ('bonne chance pour le lvl', lvl)
-        #lancer le lv
+        #lancer le lvl
     else :
         print ("Vous n'êtes pas assez expérimenté pour faire se niveau, faites les niveau inférieurs")
         menu ()
@@ -346,7 +336,7 @@ def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de 
 
 ## Fonction des niveaux
 
-def lvl (lvl, ref, nb, a, b, c, d): 
+def lvl (lvl, ref, nb): 
     lock (lvl)
     note (ref, nb)
-    unlock (a, b ,c, d)
+    unlock (lvl)
