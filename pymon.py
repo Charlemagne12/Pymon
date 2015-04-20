@@ -8,8 +8,7 @@
 
 from tkinter import * #Interface
 from random import * #Aleatoire
-import winsound #Lecture des sons
-import pickle # Permet la fonction 'lock' et 'unlock'
+from winsound import * #Lecture des sons
 
 ##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
 grisClair="#dedede"
@@ -84,13 +83,13 @@ def menu():
     lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
     lvs.pack(fill=BOTH)
     
-    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair)
+    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair,command=unlock(1))
     lv1.pack(fill=BOTH)
     
-    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair)
+    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair,command=unlock(2))
     lv2.pack(fill=BOTH)
     
-    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair)
+    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair,command=unlock(3))
     lv3.pack(fill=BOTH)
     
     danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
@@ -105,7 +104,7 @@ def menu():
     survivalScore=Button(menuWindow,text="Scores du Survival",command=survivalScoreFunc,bg="grey",activebackground=grisClair)
     survivalScore.pack(fill=BOTH)
     
-    commands=Label(menuWindow,text="Touches : QSDFJKL",fg='grey')
+    commands=Label(menuWindow,text="Touches : QSDFKLM - H pour un joker",fg='grey')
     commands.pack(fill=BOTH)
     
     vide=Label(menuWindow,text="",anchor=CENTER,justify=CENTER)
@@ -116,16 +115,32 @@ def menu():
     
 ## Choix aléatoire d'un nombre puis d'une note
 
-
+#TODO
 
 ##Création de la fonction du déblocage des niveaux
+#TODO
 
-def unlock():
+def unlockError():
+    unlockingError=Tk()
+    unlockingError.title("Pymon - Erreur !")
     
-    unlock=open("data/unlock.txt")
-    checking=unlock.readlines()
-    global unlockingStatus
-    unlockingStatus=checking[1]+checking[2]+checking[3]
+    unlockingErrorMessage=Label(unlockingError,text="Veuillez finir le niveau précédent avant !",bg=rougeClair)
+    unlockingErrorMessage.pack(fill=BOTH)
+    
+    unlockingError.mainloop()
+
+def unlock(lvl):
+    
+    unlock=open("data/unlock.txt","r")
+    unlockingStatus=unlock.readline()
+    unlockingStatus=int(unlockingStatus)
+    
+    if lvl>unlockingStatus:
+        unlockError()
+    else:
+        print("bravo")
+    
+    unlock.close()
 
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
@@ -192,7 +207,6 @@ def levelComplete():
 ########################
 launch()
 
-
 ############ Ajouts Quentin ##############
 
 ## le tuto
@@ -253,42 +267,6 @@ listNote_lvl3=['sons/lvl3_do.wav','sons/lvl3_re.wav','sons/lvl3_mi.wav','sons/lv
 listNote_sur=['sons/sur_do.wav','sons/sur_re.wav','sons/sur_mi.wav','sons/sur_fa.wav','sons/sur_sol.wav','sons/sur_la.wav','sons/sur_si.wav'] # Fichier audio pouvant sortir au survival
     # Les différentes touches qui seront liés plus tard aux notes
 listKeyboard=['q','s','d','f','k','l','m']
-
-
-
-
-## Fonction lock et unlock
-
-## Fonction lock et unlock
-
-# A la fin du niveau
-def unlock (lvl):
-    verrou = lvl+1 # variable permettant de vérifier si le joueur a fais les lvl précédents (survival et le lvl 4)
-    f = open('fichierUnlock', 'wb')
-
-    pickle.dump(verrou, f)
-
-    f.close()
-
-
-def lock (lvl):
-# Lis l variable variable mis dans 'fichierUnlock'
-    f = open('fichierUnlock', 'rb')
-    
-    verrou = pickle.load(f)
-    
-    f.close()
-    
-# Aide diagnostique
-    print(verrou)
-    
-    if lvl <= verrou :
-        print ('bonne chance pour le lvl', lvl)
-        #lancer le lvl
-    else :
-        print ("Vous n'êtes pas assez expérimenté pour faire se niveau, faites les niveau inférieurs")
-        menu ()
-
 
 ## Fonction note
 
