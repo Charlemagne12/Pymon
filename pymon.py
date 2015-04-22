@@ -152,7 +152,8 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
     RepHistory=[] # Liste répertoriant les réponses utilisateur
-    score=0 # Assez explicite 
+    score=0 # Comptabilise le total des points du joueur le long du niveau
+    error=0 # Comptabilise les erreurs fait par l'utilisateur
     
 
     for i in range (nb): # suivant la difficulté changer le 3 #
@@ -191,41 +192,45 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
                     score=score-200
                 check=check+1
                 
-            else:
-                gameOver()
-                
-    print ('Bravo vous avez fait un score de',score) #todo : la limite de score au cas ou le joueur parvient à la fin avec beaucoup d'aides
+            else: # Compte les erreurs
+                error=error+1
+        if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
+            print ('Bravo vous avez fait un score de',score) #todo: faire un widget si tu as le temps
+        else :
+            gameOver() # todo : Ne pas oublier le retour au menu
+    # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score<lvlUp :
         tryAgain()
-    else :
+    else : # si son score est supérieur au minimum fixé en arguments dans 'note'
         levelComplete()
         
 ## le tuto
 def tutoriel():
+    
     NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
     KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
     RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
+    error=0 # Comptabilise les erreurs fait par l'utilisateur
     
     print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
     print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m")
     print ("et bien commençons sans tarder")
     
     for c in range (7): # Boucle qui joue une à une les notes
-        listTuto=['do','re','mi','fa','sol','la','si']
+        listTuto=['do','re','mi','fa','sol','la','si'] #Liste qui permet d'aider le joueur pour le tutoriel
         
         winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
         print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
     
-        print (c)
-    
-    # Réponse de l'utilisateur
+    # Réponse de l'utilisateur et juste après vérifie si la réponse est juste
     
         reponse=input('donner la lettre correspondant à cett note : ')
         if listKeyboard[c]==reponse :
             print('bravo')
         else :
             print('hiiinnn faux')
-        
+    
+    # Petit récapitulatif dans les conditions normal d'utilisation du jeu
     print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
     for c in range (7):
         winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
@@ -237,17 +242,21 @@ def tutoriel():
     for j in range (6):
         if KbHistory[j]==RepHistory[j] :
             print('bravo')
-        else:
-            print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
-            gameOver()
-    levelComplete()
+        else: # Compte les erreurs
+            error=error+1
+    
+    if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
+        print ('Bravo vous avez fait un score de',score) #todo: faire un widget si tu as le temps
+        gameOver() # todo : Faire absolument un retour au menu 
+    else :
+        levelComplete()
     lock (0)
     
     #TODO : Fenêtre
     
 ## Fonction des niveaux
 
-def lvlFunc (lvl, ref, nb, lvlUp): 
+def lvlFunc (lvl, ref, nb, lvlUp):  
     note (ref, nb, lvlUp)
     lock (lvl)
     #TODO : lvlWindow()
