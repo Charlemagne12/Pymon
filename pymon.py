@@ -21,6 +21,8 @@ listNote_sur=['sounds/survival/sur_do.wav','sounds/survival/sur_re.wav','sounds/
     # Les différentes touches qui seront liés plus tard aux notes
 listKeyboard=['q','s','d','f','k','l','m']
 
+#TODO : dire de pas utiliser les majuscules
+
 ##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
 grisClair="#dedede"
 grisFonce="#3d3d3d"
@@ -238,11 +240,10 @@ def tutoriel():
         else:
             print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
             gameOver()
-    lock (0)
     levelComplete()
+    lock (0)
     
     #TODO : Fenêtre
-    #TODO : fermeture du menu (s'inspirer de survivalScoreFunc)
     
 ## Fonction des niveaux
 
@@ -348,11 +349,16 @@ def menu():
     menuWindow.title("Pymon")
     menuWindow.geometry("350x265")
     
+    #Création d'une mini-fonction pour la fermeture du menu et lancement du niveau afin de fonctionner avec les boutons.
+    def tutoStart():
+        menuWindow.destroy()
+        tutoriel()
+    
     #Création de chaque bouton et Labels décoratifs
     title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
     title.pack(fill=BOTH)
     
-    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair,command=tutoriel)
+    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair,command=tutoStart)
     tuto.pack(fill=BOTH)
     
     lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
