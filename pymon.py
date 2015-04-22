@@ -8,7 +8,17 @@
 
 from tkinter import * #Interface
 from random import * #Aleatoire
-from winsound import * #Lecture des sons
+import winsound #Lecture des sons # /!\ winsound s'importe comme sa et pas autrement 
+
+## Listes permetant de faire fonctionner le jeu
+    # Les differentes listes de références suivant les niveau ( à mettre juste après les importations )
+listNote_tuto=['sons/tuto_do.wav','sons/tuto_re.wav','sons/tuto_mi.wav','sons/tuto_fa.wav','sons/tuto_sol.wav','sons/tuto_la.wav','sons/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
+listNote_lvl1=['sons/lvl1_do.wav','sons/lvl1_re.wav','sons/lvl1_mi.wav','sons/lvl1_fa.wav','sons/lvl1_sol.wav','sons/lvl1_la.wav','sons/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
+listNote_lvl2=['sons/lvl2_do.wav','sons/lvl2_re.wav','sons/lvl2_mi.wav','sons/lvl2_fa.wav','sons/lvl2_sol.wav','sons/lvl2_la.wav','sons/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
+listNote_lvl3=['sons/lvl3_do.wav','sons/lvl3_re.wav','sons/lvl3_mi.wav','sons/lvl3_fa.wav','sons/lvl3_sol.wav','sons/lvl3_la.wav','sons/lvl3_si.wav'] # Fichier audio pouvant sortir au lvl 3
+listNote_sur=['sons/sur_do.wav','sons/sur_re.wav','sons/sur_mi.wav','sons/sur_fa.wav','sons/sur_sol.wav','sons/sur_la.wav','sons/sur_si.wav'] # Fichier audio pouvant sortir au survival
+    # Les différentes touches qui seront liés plus tard aux notes
+listKeyboard=['q','s','d','f','k','l','m']
 
 ##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
 grisClair="#dedede"
@@ -259,22 +269,22 @@ launch()
 ############ Ajouts Quentin ##############
 
 ## le tuto
-def tutoriel ():
-    NoteHistory=[]
-    KbHistory=[]
-    RepHistory=[]
+def tutoriel (ref, lvl):
+    NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
+    KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
+    RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
     
     print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
     print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, j, k, l")
     print ("et bien commençons sans tarder")
-    for c in range (6):
-        listNote=['do.wav','re.wav','mi.wav','fa.wav','sol.wav','la.wav','si.wav']
-        listTuto=['do','re','mi','fa','sol','la','si']
-        listKeyboard=['q','s','d','f','j','k','l']
-        winsound.PlaySound(listNote[c],winsound.SND_FILENAME)
-        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c])
     
-    #fin fonction programme - Début aide diagnostique
+    for c in range (6): # Boucle qui joue une à une les notes
+        listTuto=['do','re','mi','fa','sol','la','si']
+        
+        winsound.PlaySound(ref[c],winsound.SND_FILENAME)
+        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
+    
+    # todo : fin fonction programme - Début aide diagnostique ( a virer)
     
         print (c)
     
@@ -288,8 +298,8 @@ def tutoriel ():
         
     print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
     for c in range (6):
-        winsound.PlaySound(listNote[c],winsound.SND_FILENAME)
-        NoteHistory.append(listNote[c])
+        winsound.PlaySound(ref[c],winsound.SND_FILENAME)
+        NoteHistory.append(ref[c])
         KbHistory.append(listKeyboard[c])
     
     RepHistory=list(input('donner la lettre correspondant à cett note : '))
@@ -299,27 +309,16 @@ def tutoriel ():
             print('bravo')
         else:
             print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
-            menu()
-            #créer une fenetre pour game over
-    print ('bravo vous pouvez ainsi passer à la suite bonne chance :P')
-    unlock (0)
+            gameOver()
+    lock (lvl)
+    levelComplete()
     
 
 ####### voici le bloc important de notre programme #######
 
-## Squellette
-    # Les differentes listes de références suivant les niveau ( à mettre juste après les importations )
-listNote_tuto=['sons/tuto_do.wav','sons/tuto_re.wav','sons/tuto_mi.wav','sons/tuto_fa.wav','sons/tuto_sol.wav','sons/tuto_la.wav','sons/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
-listNote_lvl1=['sons/lvl1_do.wav','sons/lvl1_re.wav','sons/lvl1_mi.wav','sons/lvl1_fa.wav','sons/lvl1_sol.wav','sons/lvl1_la.wav','sons/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
-listNote_lvl2=['sons/lvl2_do.wav','sons/lvl2_re.wav','sons/lvl2_mi.wav','sons/lvl2_fa.wav','sons/lvl2_sol.wav','sons/lvl2_la.wav','sons/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
-listNote_lvl3=['sons/lvl3_do.wav','sons/lvl3_re.wav','sons/lvl3_mi.wav','sons/lvl3_fa.wav','sons/lvl3_sol.wav','sons/lvl3_la.wav','sons/lvl3_si.wav'] # Fichier audio pouvant sortir au lvl 3
-listNote_sur=['sons/sur_do.wav','sons/sur_re.wav','sons/sur_mi.wav','sons/sur_fa.wav','sons/sur_sol.wav','sons/sur_la.wav','sons/sur_si.wav'] # Fichier audio pouvant sortir au survival
-    # Les différentes touches qui seront liés plus tard aux notes
-listKeyboard=['q','s','d','f','k','l','m']
-
 ## Fonction note
 
-def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de note pour le lvl
+def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la liste de note pour le lvl
     
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
@@ -354,14 +353,46 @@ def note (ref, nb): # Nombre de note à la fin du niveau, 'ref' est la liste de 
                 print('bravo') # A enlever le bravo fait tache #
                 score=score+100 # Attribution du score afin de débloquer les niveau suivants 
                 check=check+1
+            
+            elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
+                print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
+                if score<200 : # Pas de score négatif c'est peu encourageant
+                    score=0
+                else :
+                    score=score-200
+                check=check+1
+                
             else:
-                print ('hiiiinn faut')
-                #créer une fenetre pour game over
-                menu () # Fin du jeu à la moindre erreur car se jeu est pour les winners
+                gameOver()
+                
     print ('Bravo vous avez fait un score de',score) #todo : la limite de score au cas ou le joueur parvient à la fin avec beaucoup d'aides
+    if score<lvlUp :
+        tryAgain()
+    else :
+        levelComplete()
+        
+        
+## Fonction 'lock' super simple a la fin du lvl
 
+def lock (lvl) :
+    fichier=open("data/unlock.txt","r")
+    unlockingStatus=fichier.readline()
+    unlockingStatus=int(unlockingStatus)
+    fichier.close()
+    
+    if unlockingStatus>lvl : # Si le joueur à déja fais les lvl sup il ne faut pas pénaliser sa progression (ex qq'un qui refait le lvl1 il ne faut pas marquer 1 dans le fichier :)
+        menu ()
+        
+    else : # et s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
+        lvl=lvl+1
+        fichier=open("data/unlock.txt","w")
+        fichier.write(str(lvl))
+        fichier.close ()
+        print ("vous pouvez ainsi passer au niveau", lvl)
+        
 
 ## Fonction des niveaux
 
-def lvl (lvl, ref, nb): 
-    note (ref, nb)
+def lvl (lvl, ref, nb, lvlUp): 
+    note (ref, nb, lvlUp)
+    lock (lvl)
