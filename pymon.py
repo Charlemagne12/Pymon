@@ -11,12 +11,12 @@ from random import * #Aleatoire
 import winsound #Lecture des sons # /!\ winsound s'importe comme sa et pas autrement 
 
 ## Listes permetant de faire fonctionner le jeu
-    # Les differentes listes de références suivant les niveau ( à mettre juste après les importations )
-listNote_tuto=['sons/tuto_do.wav','sons/tuto_re.wav','sons/tuto_mi.wav','sons/tuto_fa.wav','sons/tuto_sol.wav','sons/tuto_la.wav','sons/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
-listNote_lvl1=['sons/lvl1_do.wav','sons/lvl1_re.wav','sons/lvl1_mi.wav','sons/lvl1_fa.wav','sons/lvl1_sol.wav','sons/lvl1_la.wav','sons/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
-listNote_lvl2=['sons/lvl2_do.wav','sons/lvl2_re.wav','sons/lvl2_mi.wav','sons/lvl2_fa.wav','sons/lvl2_sol.wav','sons/lvl2_la.wav','sons/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
-listNote_lvl3=['sons/lvl3_do.wav','sons/lvl3_re.wav','sons/lvl3_mi.wav','sons/lvl3_fa.wav','sons/lvl3_sol.wav','sons/lvl3_la.wav','sons/lvl3_si.wav'] # Fichier audio pouvant sortir au lvl 3
-listNote_sur=['sons/sur_do.wav','sons/sur_re.wav','sons/sur_mi.wav','sons/sur_fa.wav','sons/sur_sol.wav','sons/sur_la.wav','sons/sur_si.wav'] # Fichier audio pouvant sortir au survival
+        # Les differentes listes de références suivant les niveau ( à mettre juste après les importation )
+listNote_tuto=['sounds/tutorial/tuto_do.wav','sounds/tutorial/tuto_re.wav','sounds/tutorial/tuto_mi.wav','sounds/tutorial/tuto_fa.wav','sounds/tutorial/tuto_sol.wav','sounds/tutorial/tuto_la.wav','sounds/tutorial/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
+listNote_lvl1=['sounds/lv1/lvl1_do.wav','sounds/lv1/lvl1_re.wav','sounds/lv1/lvl1_mi.wav','sounds/lv1/lvl1_fa.wav','sounds/lv1/lvl1_sol.wav','sounds/lv1/lvl1_la.wav','sounds/lv1/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
+listNote_lvl2=['sounds/lv2/lvl2_do.wav','sounds/lv2/lvl2_re.wav','sounds/lv2/lvl2_mi.wav','sounds/lv2/lvl2_fa.wav','sounds/lv2/lvl2_sol.wav','sounds/lv2/lvl2_la.wav','sounds/lv2/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
+listNote_lvl3=['sounds/lv3/lvl3_do.wav','sounds/lv3/lvl3_re.wav','sounds/lv3/lvl3_mi.wav','sounds/lv3/lvl3_fa.wav','sounds/lv3/lvl3_sol.wav','sounds/lv3/lvl3_la.wav','sounds/lv3/lvl3_si.wav'] # Fichier audio pouvant sortir au lvl 3
+listNote_sur=['sounds/survival/sur_do.wav','sounds/survival/sur_re.wav','sounds/survival/sur_mi.wav','sounds/survival/sur_fa.wav','sounds/survival/sur_sol.wav','sounds/survival/sur_la.wav','sounds/survival/sur_si.wav'] # Fichier audio pouvant sortir au survival
     # Les différentes touches qui seront liés plus tard aux notes
 listKeyboard=['q','s','d','f','k','l','m']
 
