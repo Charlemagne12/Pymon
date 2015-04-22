@@ -123,19 +123,19 @@ def menu():
     #qui vérifient si telles variables sont True ou False et agit en fonction.
     def unlockLevel1():
         if level1Unlock==True:
-            print("Level 1 Unlock") #todo: virer cette phrase de test quand on aura tout et lancer le niveau
+            lvl(1,listNote_lvl1,5,1100)
         else:
             unlockError()
     
     def unlockLevel2():
         if level2Unlock==True:
-            print("Level 2 Unlock") #todo: virer cette phrase de test quand on aura tout
+            lvl(2,listNote_lvl2,10,4700)
         else:
             unlockError()
     
     def unlockLevel3():
         if level3Unlock==True:
-            print("Level 3 Unlock") #todo: virer cette phrase de test quand on aura tout
+            lvl(3,listNote_lvl3,15,10200)
         else:
             unlockError()
         
@@ -144,11 +144,11 @@ def menu():
     menuWindow.title("Pymon")
     menuWindow.geometry("350x265")
     
-    #Création de chaque bouton
+    #Création de chaque bouton et Labels décoratifs
     title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
     title.pack(fill=BOTH)
     
-    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair)
+    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair,command=tutoriel)
     tuto.pack(fill=BOTH)
     
     lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
@@ -220,7 +220,7 @@ def survivalScoreFunc():
     #Lancement de la fenêtre
     displayScore.mainloop()
     
-##Fenêtres de Game Over et de Level Complete et de Try Again
+##Fenêtres de Game Over, de Level Complete et de Try Again
 
 def gameOver():
     
@@ -269,22 +269,20 @@ launch()
 ############ Ajouts Quentin ##############
 
 ## le tuto
-def tutoriel (ref, lvl):
+def tutoriel():
     NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
     KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
     RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
     
     print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
-    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, j, k, l")
+    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m")
     print ("et bien commençons sans tarder")
     
-    for c in range (6): # Boucle qui joue une à une les notes
+    for c in range (7): # Boucle qui joue une à une les notes
         listTuto=['do','re','mi','fa','sol','la','si']
         
-        winsound.PlaySound(ref[c],winsound.SND_FILENAME)
+        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
         print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
-    
-    # todo : fin fonction programme - Début aide diagnostique ( a virer)
     
         print (c)
     
@@ -298,11 +296,11 @@ def tutoriel (ref, lvl):
         
     print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
     for c in range (6):
-        winsound.PlaySound(ref[c],winsound.SND_FILENAME)
-        NoteHistory.append(ref[c])
+        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
+        NoteHistory.append(listNote_tuto[c])
         KbHistory.append(listKeyboard[c])
     
-    RepHistory=list(input('donner la lettre correspondant à cett note : '))
+    RepHistory=list(input('donner les lettres correspondant à cett note : '))
     
     for j in range (6):
         if KbHistory[j]==RepHistory[j] :
@@ -310,7 +308,7 @@ def tutoriel (ref, lvl):
         else:
             print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
             gameOver()
-    lock (lvl)
+    lock (0)
     levelComplete()
     
 
