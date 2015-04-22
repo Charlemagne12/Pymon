@@ -4,7 +4,7 @@ launcher : fait
 
 menu : fait par Antoine + Unlock par Antoine + lock par Quentin
 
-levels (sons) : Fait par Quentin
+levels (sons) : Fait par Quentin winsound, a faire ossaudiodev
 
 levels (random + list) : Fait par Quentin
 
