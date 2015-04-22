@@ -2,13 +2,17 @@
 
 launcher : fait
 
-menu : fait par Antoine
+menu : fait par Antoine + Unlock par Antoine + lock par Quentin
 
-levels (sons) : A faire par Quentin
+levels (sons) : Fait par Quentin
 
-levels (random + list) : A faire par Quentin
+levels (random + list) : Fait par Quentin
 
-levels (fenêtre + joker) : A faire par Antoine
+Jokers : fait par Quentin
+
+levels (fenêtre) : A faire par Antoine
+
+Survival : A faire par Antoine
 
 best : fait par Antoine
 
