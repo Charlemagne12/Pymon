@@ -11,7 +11,8 @@ from random import * #Aleatoire
 import winsound #Lecture des sons # /!\ winsound s'importe comme sa et pas autrement 
 
 ## Listes permetant de faire fonctionner le jeu
-        # Les differentes listes de références suivant les niveau ( à mettre juste après les importation )
+
+# Les differentes listes de références suivant les niveau
 listNote_tuto=['sounds/tutorial/tuto_do.wav','sounds/tutorial/tuto_re.wav','sounds/tutorial/tuto_mi.wav','sounds/tutorial/tuto_fa.wav','sounds/tutorial/tuto_sol.wav','sounds/tutorial/tuto_la.wav','sounds/tutorial/tuto_si.wav'] # Fichier audio pouvant sortir au tuto
 listNote_lvl1=['sounds/lv1/lvl1_do.wav','sounds/lv1/lvl1_re.wav','sounds/lv1/lvl1_mi.wav','sounds/lv1/lvl1_fa.wav','sounds/lv1/lvl1_sol.wav','sounds/lv1/lvl1_la.wav','sounds/lv1/lvl1_si.wav'] # Fichier audio pouvant sortir au lvl 1
 listNote_lvl2=['sounds/lv2/lvl2_do.wav','sounds/lv2/lvl2_re.wav','sounds/lv2/lvl2_mi.wav','sounds/lv2/lvl2_fa.wav','sounds/lv2/lvl2_sol.wav','sounds/lv2/lvl2_la.wav','sounds/lv2/lvl2_si.wav'] # Fichier audio pouvant sortir au lvl 2
@@ -82,143 +83,6 @@ def unlockError():
     
     unlockingErrorMessage=Label(unlockingError,text="Veuillez finir le niveau précédent avant !",bg=rougeClair)
     unlockingErrorMessage.pack(fill=BOTH)
-
-##Création du Menu Principal
-
-def menu():
-    
-    #Vérification du déblocage des niveaux a l'aide d'un fichier
-    unlock=open("data/unlock.txt","r")
-    unlockingStatus=unlock.readline()
-    unlockingStatus=int(unlockingStatus)
-    
-    #Initialisation des variables
-    level1Unlock=False
-    level2Unlock=False
-    level3Unlock=False
-    
-    #Paramétrage des variables
-    if unlockingStatus==0:
-        level1Unlock=False
-        level2Unlock=False
-        level3Unlock=False
-    elif unlockingStatus==1:
-        level1Unlock=True
-        level2Unlock=False
-        level3Unlock=False
-    elif unlockingStatus==2:
-        level1Unlock=True
-        level2Unlock=True
-        level3Unlock=False
-    elif unlockingStatus==3:
-        level1Unlock=True
-        level2Unlock=True
-        level3Unlock=True
-    else:
-        print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
-        
-    #Ces fonctions sont appellées par les boutons pour le déblocage des niveaux.
-    #Au départ, nous avions fait une fonction qui prenait des paramètres, mais ça ne fonctionnait pas
-    #avec le command des boutons de Tkinter. Il a donc fallu faire des fonctions sans paramètres
-    #qui vérifient si telles variables sont True ou False et agit en fonction.
-    def unlockLevel1():
-        if level1Unlock==True:
-            lvl(1,listNote_lvl1,5,1100)
-        else:
-            unlockError()
-    
-    def unlockLevel2():
-        if level2Unlock==True:
-            lvl(2,listNote_lvl2,10,4700)
-        else:
-            unlockError()
-    
-    def unlockLevel3():
-        if level3Unlock==True:
-            lvl(3,listNote_lvl3,15,10200)
-        else:
-            unlockError()
-        
-    #Création de la fenêtre
-    menuWindow=Tk()
-    menuWindow.title("Pymon")
-    menuWindow.geometry("350x265")
-    
-    #Création de chaque bouton et Labels décoratifs
-    title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
-    title.pack(fill=BOTH)
-    
-    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair,command=tutoriel)
-    tuto.pack(fill=BOTH)
-    
-    lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
-    lvs.pack(fill=BOTH)
-    
-    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair,command=unlockLevel1)
-    lv1.pack(fill=BOTH)
-    
-    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair,command=unlockLevel2)
-    lv2.pack(fill=BOTH)
-    
-    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair,command=unlockLevel3)
-    lv3.pack(fill=BOTH)
-    
-    danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
-    danger.pack(fill=BOTH)
-    
-    survival=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce)
-    survival.pack(fill=BOTH)
-    
-    separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
-    separation.pack(fill=BOTH)
-    
-    survivalScore=Button(menuWindow,text="Scores du Survival",command=survivalScoreFunc,bg="grey",activebackground=grisClair)
-    survivalScore.pack(fill=BOTH)
-    
-    commands=Label(menuWindow,text="Touches : QSDFKLM - H pour un joker",fg='grey')
-    commands.pack(fill=BOTH)
-    
-    vide=Label(menuWindow,text="",anchor=CENTER,justify=CENTER)
-    vide.pack(fill=BOTH)
-    
-    #Lancement de la fenêtre
-    menuWindow.mainloop()
-
-##Définition de la fonction codant pour les meilleurs scores du Survival
-
-def survivalScoreFunc():
-    
-    #Ouverture du fichier
-    survivalScore=open("data/survivalScore.txt","r")
-    listScore=survivalScore.readlines() #"listScore" est une liste qui compte chaque ligne comme un élément de la liste
-    
-    #Création de la fenêtre
-    displayScore=Tk()
-    displayScore.title("Pymon - Scores du Survival")
-    
-    phraseScore=Label(displayScore,text="Ceci sont les scores obtenus par les joueurs sur le Survival :")
-    phraseScore.pack(fill=BOTH)
-    
-    #Création de la listbox pour afficher les scores
-    printScore=Listbox(displayScore)
-    
-    sizeListScore=len(listScore) #Définition de la variable correspondant a la longueur de la liste listScore
-    i=0
-    
-    #Boucle pour afficher chaque élément de listScore dans la listbox
-    for i in range(sizeListScore):
-        printScore.insert(i,listScore[i])
-    printScore.pack(fill=BOTH)
-    
-    #Bouton de retour au menu
-    menuBack=Button(displayScore,text="Retour au menu",command=displayScore.destroy,bg="grey",activebackground=grisClair)
-    menuBack.pack(fill=BOTH)
-    
-    #Fermeture du fichier
-    survivalScore.close()
-    
-    #Lancement de la fenêtre
-    displayScore.mainloop()
     
 ##Fenêtres de Game Over, de Level Complete et de Try Again
 
@@ -261,59 +125,24 @@ def tryAgain():
     
     tryAgainWindow.mainloop()
     
-########################
-#Lancement du programme#
-########################
-launch()
+## Fonction 'lock' super simple a la fin du lvl
 
-############ Ajouts Quentin ##############
-
-## le tuto
-def tutoriel():
-    NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
-    KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
-    RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
+def lock (lvl) :
+    fichier=open("data/unlock.txt","r")
+    unlockingStatus=fichier.readline()
+    unlockingStatus=int(unlockingStatus)
+    fichier.close()
     
-    print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
-    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m")
-    print ("et bien commençons sans tarder")
-    
-    for c in range (7): # Boucle qui joue une à une les notes
-        listTuto=['do','re','mi','fa','sol','la','si']
+    if unlockingStatus>lvl : # Si le joueur à déja fais les lvl sup il ne faut pas pénaliser sa progression (ex qq'un qui refait le lvl1 il ne faut pas marquer 1 dans le fichier :)
+        menu ()
         
-        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
-        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
-    
-        print (c)
-    
-    # Réponse de l'utilisateur
-    
-        reponse=input('donner la lettre correspondant à cett note : ')
-        if listKeyboard[c]==reponse :
-            print('bravo')
-        else :
-            print('hiiinnn faux')
+    else : # et s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
+        lvl=lvl+1
+        fichier=open("data/unlock.txt","w")
+        fichier.write(str(lvl))
+        fichier.close ()
+        print ("vous pouvez ainsi passer au niveau", lvl) #TODO : fenêtre
         
-    print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
-    for c in range (6):
-        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
-        NoteHistory.append(listNote_tuto[c])
-        KbHistory.append(listKeyboard[c])
-    
-    RepHistory=list(input('donner les lettres correspondant à cett note : '))
-    
-    for j in range (6):
-        if KbHistory[j]==RepHistory[j] :
-            print('bravo')
-        else:
-            print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
-            gameOver()
-    lock (0)
-    levelComplete()
-    
-
-####### voici le bloc important de notre programme #######
-
 ## Fonction note
 
 def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la liste de note pour le lvl
@@ -369,28 +198,198 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     else :
         levelComplete()
         
-        
-## Fonction 'lock' super simple a la fin du lvl
-
-def lock (lvl) :
-    fichier=open("data/unlock.txt","r")
-    unlockingStatus=fichier.readline()
-    unlockingStatus=int(unlockingStatus)
-    fichier.close()
+## le tuto
+def tutoriel():
+    NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
+    KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
+    RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
     
-    if unlockingStatus>lvl : # Si le joueur à déja fais les lvl sup il ne faut pas pénaliser sa progression (ex qq'un qui refait le lvl1 il ne faut pas marquer 1 dans le fichier :)
-        menu ()
+    print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
+    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m")
+    print ("et bien commençons sans tarder")
+    
+    for c in range (7): # Boucle qui joue une à une les notes
+        listTuto=['do','re','mi','fa','sol','la','si']
         
-    else : # et s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
-        lvl=lvl+1
-        fichier=open("data/unlock.txt","w")
-        fichier.write(str(lvl))
-        fichier.close ()
-        print ("vous pouvez ainsi passer au niveau", lvl)
+        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
+        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
+    
+        print (c)
+    
+    # Réponse de l'utilisateur
+    
+        reponse=input('donner la lettre correspondant à cett note : ')
+        if listKeyboard[c]==reponse :
+            print('bravo')
+        else :
+            print('hiiinnn faux')
         
-
+    print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
+    for c in range (7):
+        winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
+        NoteHistory.append(listNote_tuto[c])
+        KbHistory.append(listKeyboard[c])
+    
+    RepHistory=list(input('donner les lettres correspondant à cett note : '))
+    
+    for j in range (6):
+        if KbHistory[j]==RepHistory[j] :
+            print('bravo')
+        else:
+            print("hiiin faux je t'encourage à recommencer le tutoriel depuis le début")
+            gameOver()
+    lock (0)
+    levelComplete()
+    
+    #TODO : Fenêtre
+    #TODO : fermeture du menu (s'inspirer de survivalScoreFunc)
+    
 ## Fonction des niveaux
 
-def lvl (lvl, ref, nb, lvlUp): 
+def lvlFunc (lvl, ref, nb, lvlUp): 
     note (ref, nb, lvlUp)
     lock (lvl)
+    #TODO : lvlWindow()
+
+##Définition de la fonction codant pour les meilleurs scores du Survival
+
+def survivalScoreFunc():
+    
+    #Ouverture du fichier
+    survivalScore=open("data/survivalScore.txt","r")
+    listScore=survivalScore.readlines() #"listScore" est une liste qui compte chaque ligne comme un élément de la liste
+    
+    #Création de la fenêtre
+    displayScore=Tk()
+    displayScore.title("Pymon - Scores du Survival")
+    
+    phraseScore=Label(displayScore,text="Ceci sont les scores obtenus par les joueurs sur le Survival :")
+    phraseScore.pack(fill=BOTH)
+    
+    #Création de la listbox pour afficher les scores
+    printScore=Listbox(displayScore)
+    
+    sizeListScore=len(listScore) #Définition de la variable correspondant a la longueur de la liste listScore
+    i=0
+    
+    #Boucle pour afficher chaque élément de listScore dans la listbox
+    for i in range(sizeListScore):
+        printScore.insert(i,listScore[i])
+    printScore.pack(fill=BOTH)
+    
+    #Bouton de retour au menu
+    menuBack=Button(displayScore,text="Retour au menu",command=displayScore.destroy,bg="grey",activebackground=grisClair)
+    menuBack.pack(fill=BOTH)
+    
+    #Fermeture du fichier
+    survivalScore.close()
+    
+    #Lancement de la fenêtre
+    displayScore.mainloop()
+    
+##Création du Menu Principal
+
+def menu():
+    
+    #Vérification du déblocage des niveaux a l'aide d'un fichier
+    unlock=open("data/unlock.txt","r")
+    unlockingStatus=unlock.readline()
+    unlockingStatus=int(unlockingStatus)
+    
+    #Initialisation des variables
+    level1Unlock=False
+    level2Unlock=False
+    level3Unlock=False
+    
+    #Paramétrage des variables
+    if unlockingStatus==0:
+        level1Unlock=False
+        level2Unlock=False
+        level3Unlock=False
+    elif unlockingStatus==1:
+        level1Unlock=True
+        level2Unlock=False
+        level3Unlock=False
+    elif unlockingStatus==2:
+        level1Unlock=True
+        level2Unlock=True
+        level3Unlock=False
+    elif unlockingStatus==3:
+        level1Unlock=True
+        level2Unlock=True
+        level3Unlock=True
+    else:
+        print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
+        
+    #Ces fonctions sont appellées par les boutons pour le déblocage des niveaux.
+    #Au départ, nous avions fait une fonction qui prenait des paramètres, mais ça ne fonctionnait pas
+    #avec le command des boutons de Tkinter. Il a donc fallu faire des fonctions sans paramètres
+    #qui vérifient si telles variables sont True ou False et agit en fonction.
+    def unlockLevel1():
+        if level1Unlock==True:
+            lvlFunc(1,listNote_lvl1,5,1100)
+        else:
+            unlockError()
+    
+    def unlockLevel2():
+        if level2Unlock==True:
+            lvlFunc(2,listNote_lvl2,10,4700)
+        else:
+            unlockError()
+    
+    def unlockLevel3():
+        if level3Unlock==True:
+            lvlFunc(3,listNote_lvl3,15,10200)
+        else:
+            unlockError()
+        
+    #Création de la fenêtre
+    menuWindow=Tk()
+    menuWindow.title("Pymon")
+    menuWindow.geometry("350x265")
+    
+    #Création de chaque bouton et Labels décoratifs
+    title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
+    title.pack(fill=BOTH)
+    
+    tuto=Button(menuWindow,text="Tutoriel",bg="green",activebackground=vertClair,command=tutoriel)
+    tuto.pack(fill=BOTH)
+    
+    lvs=Label(menuWindow,text="-=-=-=-=- Niveaux -=-=-=-=-",anchor=CENTER,justify=CENTER)
+    lvs.pack(fill=BOTH)
+    
+    lv1=Button(menuWindow,text="Niveau 1",bg="yellow",activebackground=jauneClair,command=unlockLevel1)
+    lv1.pack(fill=BOTH)
+    
+    lv2=Button(menuWindow,text="Niveau 2",bg="orange",activebackground=orangeClair,command=unlockLevel2)
+    lv2.pack(fill=BOTH)
+    
+    lv3=Button(menuWindow,text="Niveau 3",bg="red",activebackground=rougeClair,command=unlockLevel3)
+    lv3.pack(fill=BOTH)
+    
+    danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
+    danger.pack(fill=BOTH)
+    
+    survival=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce)
+    survival.pack(fill=BOTH)
+    
+    separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
+    separation.pack(fill=BOTH)
+    
+    survivalScore=Button(menuWindow,text="Scores du Survival",command=survivalScoreFunc,bg="grey",activebackground=grisClair)
+    survivalScore.pack(fill=BOTH)
+    
+    commands=Label(menuWindow,text="Touches : QSDFKLM - H pour un joker",fg='grey')
+    commands.pack(fill=BOTH)
+    
+    vide=Label(menuWindow,text="",anchor=CENTER,justify=CENTER)
+    vide.pack(fill=BOTH)
+    
+    #Lancement de la fenêtre
+    menuWindow.mainloop()
+
+## Lancement du programme ##
+launch()
+
+############ Ajouts Quentin ##############
+
