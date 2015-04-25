@@ -2,7 +2,7 @@
 #Pymon (c) Antoine Bouquin et Quentin Albertone. Bienvenue dans le code source. Vous avez le droit de le modifier et/ou de le redistribuer en précisant que l'original vient de nous et sans le vendre. Merci.
 
 #-------------- Nota bene :-----------------------
-#Le programme est conçu pour tourner sous Windows et UNIX. Les tailles des fenêtres sont conçues pour avoir la dimension parfaite pour Windows 7/Aero désactivé. Ainsi, suivant l'OS/le thème, l'agencement peut ne pas être parfait. Cependant, cela est purement esthétique et n'affecte en rien le fonctionnement global du programme. Bon jeu !
+#Le programme est conçu pour tourner sous Windows uniquement pour l'instant, et Linux est a venir. Les tailles des fenêtres sont conçues pour avoir la dimension parfaite pour Windows 7/Aero désactivé. Ainsi, suivant l'OS/le thème, l'agencement peut ne pas être parfait. Cependant, cela est purement esthétique et n'affecte en rien le fonctionnement global du programme. Bon jeu !
 
 ##Importation des modules
 
@@ -20,8 +20,6 @@ listNote_lvl3=['sounds/lv3/lvl3_do.wav','sounds/lv3/lvl3_re.wav','sounds/lv3/lvl
 listNote_sur=['sounds/survival/sur_do.wav','sounds/survival/sur_re.wav','sounds/survival/sur_mi.wav','sounds/survival/sur_fa.wav','sounds/survival/sur_sol.wav','sounds/survival/sur_la.wav','sounds/survival/sur_si.wav'] # Fichier audio pouvant sortir au survival
     # Les différentes touches qui seront liés plus tard aux notes
 listKeyboard=['q','s','d','f','k','l','m']
-
-#TODO : dire de pas utiliser les majuscules
 
 ##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
 grisClair="#dedede"
@@ -101,6 +99,8 @@ def gameOver():
     
     gameOverWindow.mainloop()
     
+    menu()
+    
 def levelComplete():
     
     levelCompleteWindow=Tk()
@@ -113,6 +113,8 @@ def levelComplete():
     levelCompleteMessage2.pack(fill=BOTH)
     
     levelCompleteWindow.mainloop()
+    
+    menu()
     
 def tryAgain():
     
@@ -127,6 +129,8 @@ def tryAgain():
     
     tryAgainWindow.mainloop()
     
+    menu()
+    
 ## Fonction 'lock' super simple a la fin du lvl
 
 def lock (lvl) :
@@ -135,15 +139,12 @@ def lock (lvl) :
     unlockingStatus=int(unlockingStatus)
     fichier.close()
     
-    if unlockingStatus>lvl : # Si le joueur à déja fais les lvl sup il ne faut pas pénaliser sa progression (ex qq'un qui refait le lvl1 il ne faut pas marquer 1 dans le fichier :)
-        menu ()
-        
-    else : # et s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
+    if unlockingStatus<lvl : #s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
         lvl=lvl+1
         fichier=open("data/unlock.txt","w")
         fichier.write(str(lvl))
         fichier.close ()
-        print ("vous pouvez ainsi passer au niveau", lvl) #TODO : fenêtre
+        levelComplete()
         
 ## Fonction note
 
@@ -157,22 +158,19 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     
 
     for i in range (nb): # suivant la difficulté changer le 3 #
-    # Variable servant aux boucke while plus bas    
+    # Variable servant aux boucle while plus bas    
         sound=0
         check=0
        
     # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
-        c=randrange(6)
+        c=randrange(7)
         NoteHistory.append(ref [c])
         KbHistory.append(listKeyboard[c])
     
     # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
         while sound!=i+1 :
-            print (NoteHistory[sound]) # A enlever aide au diagnostique #
             winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
             sound=sound+1
-        print(NoteHistory) # A enlever aide au diagnostique #
-        print(KbHistory) # A enlever aide au diagnostique #
         
     # Demande une réponse à l'utilisateur que le prog met dans une liste
         RepHistory=list(input('donner la lettre correspondant à cett note : '))
@@ -197,7 +195,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
         if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
             print ('Bravo vous avez fait un score de',score) #todo: faire un widget si tu as le temps
         else :
-            gameOver() # todo : Ne pas oublier le retour au menu
+            gameOver()
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score<lvlUp :
         tryAgain()
@@ -237,22 +235,91 @@ def tutoriel():
         NoteHistory.append(listNote_tuto[c])
         KbHistory.append(listKeyboard[c])
     
-    RepHistory=list(input('donner les lettres correspondant à cett note : '))
+    RepHistory=list(input('donner les lettres correspondant à cette note : '))
     
-    for j in range (6):
+    for j in range (7):
         if KbHistory[j]==RepHistory[j] :
-            print('bravo')
+            error+=0 #histoire de pas avoir un if vide, et de limiter les possibles erreurs, on laisse la variable error telle quelle
         else: # Compte les erreurs
             error=error+1
     
     if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
-        print ('Bravo vous avez fait un score de',score) #todo: faire un widget si tu as le temps
-        gameOver() # todo : Faire absolument un retour au menu 
-    else :
         levelComplete()
+    else :
+        gameOver()
     lock (0)
     
     #TODO : Fenêtre
+    
+##Le SURVIVAL DE LA MORT
+
+def survival():
+    
+    #Initialisation des variables
+    NoteHistory=[] #Liste répertoriant les notes sortie
+    KbHistory=[] #Liste répertoriant les keyboard sortie
+    RepHistory=[] # Liste répertoriant les réponses utilisateur
+    score=0 # Comptabilise le total des points du joueur le long du niveau
+    error=0 # Comptabilise les erreurs fait par l'utilisateur
+    sound=0
+    i=0
+
+    #Création de la fenêtre
+    survivalWindow=Tk()
+    survivalWindow.title("Pymon - SURVIVAL !!")
+    
+    survivalMessage=Label(survivalWindow,text="Bienvenue dans le Survival. Les développeurs déclinent toute responsabilité\nen cas de mort, trouble mental, folie, ou toute autre altération\nqui pourrait vous être causée.",bg=rougeClair)
+    survivalMessage.pack(fill=BOTH)
+    
+    survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
+    survivalMessage2.pack(fill=BOTH)
+    
+    survivalWindow.mainloop()
+    
+    while error==0:
+        
+        # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
+        c=randrange(7)
+        NoteHistory.append(listNote_sur[c])
+        KbHistory.append(listKeyboard[c])
+        
+        # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
+        while sound!=i+1 :
+            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+            sound=sound+1
+            
+        answer=Entry(survivalWindow)
+        answer.pack()
+        
+        RepHistory=list(answer)
+        
+        for i in range(len(NoteHistory)):
+            if KbHistory[i]==RepHistory[i]:
+                score+=100
+            elif 'h'==RepHistory[i]:
+                score=score-200
+            else:
+                error+=1
+    
+    def survivalGameOver():
+        survivalGOWindow=Tk()
+        survivalGOWindow.title=("Pymon - Survival : Game Over...")
+        
+        survivalGameOverMessage=Label(survivalGOWindow,text="Dommage... Veuillez rentrer votre nom.\nVotre score est de :")
+        survivalGameOverMessage.pack(fill=BOTH)
+        
+        survivalScorePrint=Label(survivalGOWindow,text=score)
+        survivalScorePrint.pack(fill=BOTH)
+        
+        survivalPseudo=Entry(survivalGOWindow)
+        survivalPseudo.pack()
+        
+        survivalScore=open("data/survivalScore.txt","a")
+        survivalScore.write(survivalPseudo," : ",score,"\n")
+    
+    survivalGameOver()
+    
+    survivalWindow.mainloop()
     
 ## Fonction des niveaux
 
@@ -337,18 +404,21 @@ def menu():
     #qui vérifient si telles variables sont True ou False et agit en fonction.
     def unlockLevel1():
         if level1Unlock==True:
+            menuWindow.destroy()
             lvlFunc(1,listNote_lvl1,5,1100)
         else:
             unlockError()
     
     def unlockLevel2():
         if level2Unlock==True:
+            menuWindow.destroy()
             lvlFunc(2,listNote_lvl2,10,4700)
         else:
             unlockError()
     
     def unlockLevel3():
         if level3Unlock==True:
+            menuWindow.destroy()
             lvlFunc(3,listNote_lvl3,15,10200)
         else:
             unlockError()
@@ -356,12 +426,15 @@ def menu():
     #Création de la fenêtre
     menuWindow=Tk()
     menuWindow.title("Pymon")
-    menuWindow.geometry("350x265")
+    menuWindow.geometry("350x300")
     
-    #Création d'une mini-fonction pour la fermeture du menu et lancement du niveau afin de fonctionner avec les boutons.
+    #Création d'une mini-fonction pour la fermeture du menu et lancement du tutoriel/survival afin de fonctionner avec les boutons.
     def tutoStart():
         menuWindow.destroy()
         tutoriel()
+    def survivalStart():
+        menuWindow.destroy()
+        survival()
     
     #Création de chaque bouton et Labels décoratifs
     title=Label(menuWindow,text="Bienvenue dans Pymon !",anchor=CENTER,justify=CENTER)
@@ -385,7 +458,7 @@ def menu():
     danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
     danger.pack(fill=BOTH)
     
-    survival=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce)
+    survival=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce,command=survivalStart)
     survival.pack(fill=BOTH)
     
     separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
@@ -394,8 +467,11 @@ def menu():
     survivalScore=Button(menuWindow,text="Scores du Survival",command=survivalScoreFunc,bg="grey",activebackground=grisClair)
     survivalScore.pack(fill=BOTH)
     
-    commands=Label(menuWindow,text="Touches : QSDFKLM - H pour un joker",fg='grey')
+    commands=Label(menuWindow,text="Commandes : qsdfklm - h pour un joker",fg='grey')
     commands.pack(fill=BOTH)
+    
+    warning=Label(menuWindow,text="ATTENTION ! Ce programme est calibré avec des minuscules.\nPar conséquent, veuillez ne pas utiliser de majuscules.",fg='grey')
+    warning.pack(fill=BOTH)
     
     vide=Label(menuWindow,text="",anchor=CENTER,justify=CENTER)
     vide.pack(fill=BOTH)
