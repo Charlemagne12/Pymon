@@ -163,7 +163,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
         check=0
        
     # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
-        c=randrange(7)
+        c=randrange(6)
         NoteHistory.append(ref [c])
         KbHistory.append(listKeyboard[c])
     
@@ -253,16 +253,47 @@ def tutoriel():
     
 ##Le SURVIVAL DE LA MORT
 
+#Fenêtre de game over du survival
+def survivalGameOver():
+    
+    survivalGOWindow=Tk()
+    survivalGOWindow.title=("Pymon - Survival : Game Over...")
+    
+    survivalGameOverMessage=Label(survivalGOWindow,text="Dommage... Veuillez rentrer votre nom.\nVotre score est de :")
+    survivalGameOverMessage.pack(fill=BOTH)
+    
+    survivalScorePrint=Label(survivalGOWindow,text=score)
+    survivalScorePrint.pack(fill=BOTH)
+    
+    survivalPseudoEntry=Entry(survivalGOWindow)
+    survivalPseudoEntry.pack()
+    
+    def survivalWrite():
+        survivalPseudo=survivalPseudoEntry.get()
+        survivalScore=open("data/survivalScore.txt","a")
+        survivalScore.write(survivalPseudo)
+        survivalScore.write(" : ")
+        survivalScore.write(score)
+        survivalScore.write("\n")
+        
+    survivalScoreValider=Button(survivalGOWindow,text="Valider",command=survivalWrite)
+    survivalScoreValider.pack()
+    
+    survivalGOWindow.mainloop()
+    
+#Le Survival en lui-même
 def survival():
     
     #Initialisation des variables
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
     RepHistory=[] # Liste répertoriant les réponses utilisateur
-    score=0 # Comptabilise le total des points du joueur le long du niveau
+    global scoreSurvival
+    scoreSurvival=0 # Comptabilise le total des points du joueur le long du niveau
     error=0 # Comptabilise les erreurs fait par l'utilisateur
     sound=0
-    i=0
+    check=0
+    i=1
 
     #Création de la fenêtre
     survivalWindow=Tk()
@@ -274,56 +305,50 @@ def survival():
     survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
     survivalMessage2.pack(fill=BOTH)
     
-    survivalWindow.mainloop()
+    answer=Entry(survivalWindow)
+    answer.pack()
+    
+    def valider():
+        reponse=answer.get()
+        RepHistory=list(reponse)
+    
+    valid=Button(survivalWindow,text="Valider",command=valider)
+    valid.pack()
     
     while error==0:
-        
-        # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
-        c=randrange(7)
+       
+    # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
+        c=randrange(6)
         NoteHistory.append(listNote_sur[c])
         KbHistory.append(listKeyboard[c])
-        
-        # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
-        while sound!=i+1 :
-            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
-            sound=sound+1
-            
-        answer=Entry(survivalWindow)
-        answer.pack()
-        
-        RepHistory=list(answer)
-        
-        for i in range(len(NoteHistory)):
-            if KbHistory[i]==RepHistory[i]:
-                score+=100
-            elif 'h'==RepHistory[i]:
-                score=score-200
-            else:
-                error+=1
     
-    def survivalGameOver():
-        survivalGOWindow=Tk()
-        survivalGOWindow.title=("Pymon - Survival : Game Over...")
+    # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
+        while sound!=i+1 :
+            winsound.PlaySound(NoteHistory[sound],winsound.SND_FILENAME)
+            sound=sound+1
         
-        survivalGameOverMessage=Label(survivalGOWindow,text="Dommage... Veuillez rentrer votre nom.\nVotre score est de :")
-        survivalGameOverMessage.pack(fill=BOTH)
-        
-        survivalScorePrint=Label(survivalGOWindow,text=score)
-        survivalScorePrint.pack(fill=BOTH)
-        
-        survivalPseudo=Entry(survivalGOWindow)
-        survivalPseudo.pack()
-        
-        survivalScore=open("data/survivalScore.txt","a")
-        survivalScore.write(survivalPseudo," : ",score,"\n")
+    # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
+        while check!=i+1 : # Le décompte des points n'est pas au point 
+            if KbHistory[check]==RepHistory[check] :
+                scoreSurvival=scoreSurvival+100 # Attribution du score afin de débloquer les niveau suivants 
+                check=check+1
+            
+            elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
+                scoreSurvival=scoreSurvival-200
+                check=check+1
+                
+            else: # Compte les erreurs
+                error=error+1
+                scoreSurvival=str(scoreSurvival) #On doit le convertir en string pour l'écrire dans le fichier des meilleurs scores
+                
+        survivalWindow.mainloop()
+        i+=1
     
     survivalGameOver()
     
-    survivalWindow.mainloop()
-    
 ## Fonction des niveaux
 
-def lvlFunc (lvl, ref, nb, lvlUp):  
+def lvlFunc (lvl, ref, nb, lvlUp): 
     note (ref, nb, lvlUp)
     lock (lvl)
     #TODO : lvlWindow()
@@ -432,6 +457,7 @@ def menu():
     def tutoStart():
         menuWindow.destroy()
         tutoriel()
+        
     def survivalStart():
         menuWindow.destroy()
         survival()
@@ -458,8 +484,8 @@ def menu():
     danger=Label(menuWindow,text="!!!! DANGER !!!!",anchor=CENTER,justify=CENTER,fg="red")
     danger.pack(fill=BOTH)
     
-    survival=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce,command=survivalStart)
-    survival.pack(fill=BOTH)
+    survivalButton=Button(menuWindow,text="Survival !",bg="black",fg="white",activebackground=grisFonce,command=survivalStart)
+    survivalButton.pack(fill=BOTH)
     
     separation=Label(menuWindow,text="-=-=-=-=-=-=-=-=-=-=-=-=-",anchor=CENTER,justify=CENTER)
     separation.pack(fill=BOTH)
