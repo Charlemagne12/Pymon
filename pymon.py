@@ -161,20 +161,6 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     # Variable servant aux boucle while plus bas    
         sound=0
         check=0
-        
-        lvWindow=Tk()
-        lvWindow.title("Pymon - Niveau")
-        
-        message=Label(lvWindow,text="Quelle est la note/suite de note qui est sortie ?")
-        message.pack()
-        
-        answer=Entry(lvWindow)
-        answer.pack()
-        
-        def valider():
-            reponse=answer.get()
-            RepHistory=list(reponse)
-            lvWindow.destroy()
        
     # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
         c=randrange(6)
@@ -187,14 +173,12 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
             sound=sound+1
         
     # Demande une réponse à l'utilisateur que le prog met dans une liste
-        valid=Button(lvWindow,text="Valider",command=valider)
-        valid.pack()
-            
-        lvWindow.mainloop()
+        RepHistory=list(input('donner la lettre correspondant à cett note : '))
         
     # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
         while check!=i+1 : # Le décompte des points n'est pas au point 
-            if KbHistory[check]==RepHistory[check]:
+            if KbHistory[check]==RepHistory[check] :
+                print('bravo') # A enlever le bravo fait tache #
                 score=score+100 # Attribution du score afin de débloquer les niveau suivants 
                 check=check+1
             
@@ -208,9 +192,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
                 
             else: # Compte les erreurs
                 error=error+1
-        if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
-            print ('Bravo vous avez fait un score de',score)
-        else :
+        if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
             gameOver()
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score<lvlUp :
