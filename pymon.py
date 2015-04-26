@@ -158,7 +158,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     
 
     for i in range (nb): # suivant la difficulté changer le 3 #
-    # Variable servant aux boucle while plus bas    
+    # Variable servant aux boucke while plus bas    
         sound=0
         check=0
        
@@ -169,8 +169,11 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     
     # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
         while sound!=i+1 :
+            print (NoteHistory[sound]) # A enlever aide au diagnostique #
             winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
             sound=sound+1
+        print(NoteHistory) # A enlever aide au diagnostique #
+        print(KbHistory) # A enlever aide au diagnostique #
         
     # Demande une réponse à l'utilisateur que le prog met dans une liste
         RepHistory=list(input('donner la lettre correspondant à cett note : '))
@@ -194,6 +197,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
                 error=error+1
         if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
             gameOver()
+            
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score<lvlUp :
         tryAgain()
