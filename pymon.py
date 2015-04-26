@@ -161,6 +161,20 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
     # Variable servant aux boucle while plus bas    
         sound=0
         check=0
+        
+        lvWindow=Tk()
+        lvWindow.title("Pymon - Niveau")
+        
+        message=Label(lvWindow,text="Quelle est la note/suite de note qui est sortie ?")
+        message.pack()
+        
+        answer=Entry(lvWindow)
+        answer.pack()
+        
+        def valider():
+            reponse=answer.get()
+            RepHistory=list(reponse)
+            lvWindow.destroy()
        
     # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
         c=randrange(6)
@@ -173,12 +187,14 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
             sound=sound+1
         
     # Demande une réponse à l'utilisateur que le prog met dans une liste
-        RepHistory=list(input('donner la lettre correspondant à cett note : '))
+        valid=Button(lvWindow,text="Valider",command=valider)
+        valid.pack()
+            
+        lvWindow.mainloop()
         
     # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
         while check!=i+1 : # Le décompte des points n'est pas au point 
-            if KbHistory[check]==RepHistory[check] :
-                print('bravo') # A enlever le bravo fait tache #
+            if KbHistory[check]==RepHistory[check]:
                 score=score+100 # Attribution du score afin de débloquer les niveau suivants 
                 check=check+1
             
@@ -193,7 +209,7 @@ def note (ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la li
             else: # Compte les erreurs
                 error=error+1
         if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
-            print ('Bravo vous avez fait un score de',score) #todo: faire un widget si tu as le temps
+            print ('Bravo vous avez fait un score de',score)
         else :
             gameOver()
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
@@ -293,30 +309,27 @@ def survival():
     error=0 # Comptabilise les erreurs fait par l'utilisateur
     sound=0
     check=0
-    i=1
-
-    #Création de la fenêtre
-    survivalWindow=Tk()
-    survivalWindow.title("Pymon - SURVIVAL !!")
-    
-    survivalMessage=Label(survivalWindow,text="Bienvenue dans le Survival. Les développeurs déclinent toute responsabilité\nen cas de mort, trouble mental, folie, ou toute autre altération\nqui pourrait vous être causée.",bg=rougeClair)
-    survivalMessage.pack(fill=BOTH)
-    
-    survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
-    survivalMessage2.pack(fill=BOTH)
-    
-    answer=Entry(survivalWindow)
-    answer.pack()
-    
-    def valider():
-        reponse=answer.get()
-        RepHistory=list(reponse)
-    
-    valid=Button(survivalWindow,text="Valider",command=valider)
-    valid.pack()
+    i=0
     
     while error==0:
-       
+        #Création de la fenêtre
+        survivalWindow=Tk()
+        survivalWindow.title("Pymon - SURVIVAL !!")
+        
+        survivalMessage=Label(survivalWindow,text="Bienvenue dans le Survival. Les développeurs déclinent toute responsabilité\nen cas de mort, trouble mental, folie, ou toute autre altération\nqui pourrait vous être causée.",bg=rougeClair)
+        survivalMessage.pack(fill=BOTH)
+        
+        survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
+        survivalMessage2.pack(fill=BOTH)
+        
+        answer=Entry(survivalWindow)
+        answer.pack()
+        
+        def valider():
+            reponse=answer.get()
+            RepHistory=list(reponse)
+            survivalWindow.destroy()
+        
     # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
         c=randrange(6)
         NoteHistory.append(listNote_sur[c])
@@ -326,7 +339,11 @@ def survival():
         while sound!=i+1 :
             winsound.PlaySound(NoteHistory[sound],winsound.SND_FILENAME)
             sound=sound+1
+            
+        valid=Button(survivalWindow,text="Valider",command=valider)
+        valid.pack()
         
+        survivalWindow.mainloop()
     # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
         while check!=i+1 : # Le décompte des points n'est pas au point 
             if KbHistory[check]==RepHistory[check] :
@@ -341,7 +358,6 @@ def survival():
                 error=error+1
                 scoreSurvival=str(scoreSurvival) #On doit le convertir en string pour l'écrire dans le fichier des meilleurs scores
                 
-        survivalWindow.mainloop()
         i+=1
     
     survivalGameOver()
