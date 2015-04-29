@@ -203,39 +203,42 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
             levelWindow.mainloop()
             
             # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
-            while check!=i+1 : # Le décompte des points n'est pas au point 
-                if KbHistory[check]==RepHistory[check] :
-                    print('bravo') # A enlever le bravo fait tache #
-                    score=score+100 # Attribution du score afin de débloquer les niveau suivants 
-                    check=check+1
-                
-                elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
-                    print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
-                    if score<200 : # Pas de score négatif c'est peu encourageant
-                        score=0
-                    else :
-                        score=score-200
-                    check=check+1
+            try :
+                while check!=i+1 : # Le décompte des points n'est pas au point 
+                    if KbHistory[check]==RepHistory[check] :
+                        print('bravo') # A enlever le bravo fait tache #
+                        score=score+100 # Attribution du score afin de débloquer les niveau suivants 
+                        check=check+1
                     
-                elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
-                    error=error+1
-                    levelWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
-                    break                 #Cela évite de continuer la vérification.
-                    
+                    elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
+                        print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
+                        if score<200 : # Pas de score négatif c'est peu encourageant
+                            score=0
+                        else :
+                            score=score-200
+                        check=check+1
+                        
+                    elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
+                        error=error+1
+                        levelWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+                        break                 #Cela évite de continuer la vérification.
+            except IndexError :
+                error=error+1
+                levelWindow.destroy()
+                break
     if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
         gameOver()
     
     #Fermeture de la fenêtre à la fin de la boucle for si il a réussi (s'il a raté, la fenêtre se ferme dans le while plus haut)
     #En réalité, c'est limite surperflu, cela évite juste de fermer une deuxième fois la fenêtre en sortant de la boucle si
     #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
-    if error==0:
-        levelWindow.destroy()
         
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score>lvlUp :
         levelComplete()
         lock(lvl)
-    elif score<lvlUp and error==0: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
+    else: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
+        levelWindow.destroy()
         tryAgain()
         
 ## le tuto
@@ -556,6 +559,3 @@ def menu():
 
 ## Lancement du programme ##
 launch()
-
-############ Ajouts Quentin ##############
-
