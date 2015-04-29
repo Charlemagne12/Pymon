@@ -21,7 +21,7 @@ listNote_sur=['sounds/survival/sur_do.wav','sounds/survival/sur_re.wav','sounds/
     # Les différentes touches qui seront liés plus tard aux notes
 listKeyboard=['q','s','d','f','k','l','m']
 
-##Strings pour une couleur hexadécimale (purement esthétique, pour les boutons)
+##Strings pour une couleur hexadécimale (purement esthétique)
 grisClair="#dedede"
 grisFonce="#3d3d3d"
 vertClair="#2fab3d"
@@ -150,60 +150,93 @@ def lock (lvl) :
 
 def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' est la liste de note pour le lvl
     
+    global RepHistory #Ces deux variables doivent être en global pour leur réutilisation avec valider().
+    global reponse    #Elles sont de toute manière réinitialisées a chaque lancement du niveau.
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
     RepHistory=[] # Liste répertoriant les réponses utilisateur
     score=0 # Comptabilise le total des points du joueur le long du niveau
     error=0 # Comptabilise les erreurs fait par l'utilisateur
+    reponse=''
+    validation=False
     
-
+    #Création de la fenêtre
+    levelWindow=Tk()
+    levelWindow.title("Pymon - Niveau")
+    
+    levelMessage=Label(levelWindow,text="Bienvenue dans un des niveaux de Pymon !\nRépétez correctement la suite de notes jouées\npour réussir le niveau. Bonne chance !",bg=bleuClair)
+    levelMessage.pack(fill=BOTH)
+    
+    answer=Entry(levelWindow) #La zone ou la réponse sera saisie
+    answer.pack()
+    
+    def valider(): #Cette fonction sert pour le bouton "Valider". Elle prend la réponse, la transforme et permet la vérification de la réponse.
+        reponse=answer.get()
+        global RepHistory #Il faut redéfinir RepHistory comme global ici, sinon on ne peut pas l'utiliser.
+        RepHistory=list(reponse)
+        answer.delete(0,END) #Vide le widget Entry
+        levelWindow.quit() #Pour quitter la fenêtre
+        
+    validerButton=Button(levelWindow,text="Valider",command=valider)
+    validerButton.pack()
+        
     for i in range (nb): # suivant la difficulté changer le 3 #
-    # Variable servant aux boucke while plus bas    
-        sound=0
-        check=0
-       
-    # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
-        c=randrange(0,6)
-        NoteHistory.append(ref [c])
-        KbHistory.append(listKeyboard[c])
-    
-    # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
-        while sound!=i+1 :
-            print (NoteHistory[sound]) # A enlever aide au diagnostique #
-            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
-            sound=sound+1
-        print(NoteHistory) # A enlever aide au diagnostique #
-        print(KbHistory) # A enlever aide au diagnostique #
+        #Evite de relancer la boucle après un game over
+        if error==0:
+            #Variables servant aux boucles while plus bas    
+            sound=0
+            check=0
         
-    # Demande une réponse à l'utilisateur que le prog met dans une liste
-        RepHistory=list(input('donner la lettre correspondant à cett note : '))
+            # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
+            c=randrange(0,6)
+            NoteHistory.append(ref [c])
+            KbHistory.append(listKeyboard[c])
         
-    # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
-        while check!=i+1 : # Le décompte des points n'est pas au point 
-            if KbHistory[check]==RepHistory[check] :
-                print('bravo') # A enlever le bravo fait tache #
-                score=score+100 # Attribution du score afin de débloquer les niveau suivants 
-                check=check+1
-            
-            elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
-                print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
-                if score<200 : # Pas de score négatif c'est peu encourageant
-                    score=0
-                else :
-                    score=score-200
-                check=check+1
+            # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
+            while sound!=i+1 :
+                print (NoteHistory[sound]) # A enlever aide au diagnostique #
+                winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+                sound=sound+1
+            print(NoteHistory) # A enlever aide au diagnostique #
+            print(KbHistory) # A enlever aide au diagnostique #
                 
-            else: # Compte les erreurs
-                error=error+1
-        if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
-            gameOver()
+            levelWindow.mainloop()
             
+            # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
+            while check!=i+1 : # Le décompte des points n'est pas au point 
+                if KbHistory[check]==RepHistory[check] :
+                    print('bravo') # A enlever le bravo fait tache #
+                    score=score+100 # Attribution du score afin de débloquer les niveau suivants 
+                    check=check+1
+                
+                elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
+                    print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
+                    if score<200 : # Pas de score négatif c'est peu encourageant
+                        score=0
+                    else :
+                        score=score-200
+                    check=check+1
+                    
+                elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
+                    error=error+1
+                    levelWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+                    break                 #Cela évite de continuer la vérification.
+                    
+    if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
+        gameOver()
+    
+    #Fermeture de la fenêtre à la fin de la boucle for si il a réussi (s'il a raté, la fenêtre se ferme dans le while plus haut)
+    #En réalité, c'est limite surperflu, cela évite juste de fermer une deuxième fois la fenêtre en sortant de la boucle si
+    #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
+    if error==0:
+        levelWindow.destroy()
+        
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
-    if score<lvlUp :
-        tryAgain()
-    else : # si son score est supérieur au minimum fixé en arguments dans 'note'
+    if score>lvlUp :
         levelComplete()
         lock(lvl)
+    elif score<lvlUp and error==0: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
+        tryAgain()
         
 ## le tuto
 def tutoriel():
@@ -259,8 +292,6 @@ def tutoriel():
 #Fenêtre de game over du survival
 def survivalGameOver():
     
-    scoreSurvival=0 #todo: a retirer une fois le prog fini
-    
     survivalGOWindow=Tk()
     survivalGOWindow.title=("Pymon - Survival : Game Over...")
     
@@ -291,37 +322,45 @@ def survivalGameOver():
     
 #Le Survival en lui-même
 def survival():
-    #todo: fenêtre a fix (survival aussi d'ailleurs)
     
     #Initialisation des variables
+    global RepHistory #Tout comme dans la fonction des niveaux, il faut définir les variables comme global.
+    global reponse
     NoteHistory=[] #Liste répertoriant les notes sortie
     KbHistory=[] #Liste répertoriant les keyboard sortie
     RepHistory=[] # Liste répertoriant les réponses utilisateur
-    global scoreSurvival
+    global scoreSurvival #En global aussi, pour la fonction survivalGameOver
     scoreSurvival=0 # Comptabilise le total des points du joueur le long du niveau
     error=0 # Comptabilise les erreurs fait par l'utilisateur
-    sound=0
-    check=0
-    i=0
+    i=0 #Pour remplacer le i de la boucle for du niveau
+    
+    survivalWindow=Tk()
+    survivalWindow.title("Pymon - SURVIVAL !!")
+        
+    survivalMessage=Label(survivalWindow,text="Bienvenue dans le Survival. Les développeurs déclinent toute responsabilité\nen cas de mort, trouble mental, folie, ou toute autre altération\nqui pourrait vous être causée.",bg=rougeClair)
+    survivalMessage.pack(fill=BOTH)
+        
+    survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
+    survivalMessage2.pack(fill=BOTH)
+        
+    answer=Entry(survivalWindow)
+    answer.pack()
+        
+    def valider(): #Cette fonction sert pour le bouton "Valider". Elle prend la réponse, la transforme et permet la vérification de la réponse.
+        reponse=answer.get()
+        global RepHistory #Il faut redéfinir RepHistory comme global ici, sinon on ne peut pas l'utiliser.
+        RepHistory=list(reponse)
+        answer.delete(0,END) #Vide le widget Entry
+        survivalWindow.quit() #Pour quitter la fenêtre
+    
+    validerButton=Button(survivalWindow,text="Valider",command=valider)
+    validerButton.pack()
     
     while error==0:
-        #todo: a remettre si prog ok Création de la fenêtre
-        #survivalWindow=Tk()
-        #survivalWindow.title("Pymon - SURVIVAL !!")
         
-        #survivalMessage=Label(survivalWindow,text="Bienvenue dans le Survival. Les développeurs déclinent toute responsabilité\nen cas de mort, trouble mental, folie, ou toute autre altération\nqui pourrait vous être causée.",bg=rougeClair)
-        #survivalMessage.pack(fill=BOTH)
-        
-        #survivalMessage2=Label(survivalWindow,text="Ce niveau est sans fin. La liste de notes s'allongera a l'infini, jusqu'a la moindre erreur.\nUne note juste : +100. Une fausse ? -200.\nVotre score sera comptabilisé.\n\nBonne chance.",bg=rougeClair)
-        #survivalMessage2.pack(fill=BOTH)
-        
-        #answer=Entry(survivalWindow)
-        #answer.pack()
-        
-        #def valider():
-            #reponse=answer.get()
-            #RepHistory=list(reponse)
-            #survivalWindow.destroy()
+        #Variables pour les boucles while plus bas
+        sound=0
+        check=0
         
         # Tire un nombre au hasard dans les liste de références plus haut et attribut une note à une touche et les 'stock' dans des list
         c=randrange(0,6)
@@ -336,8 +375,7 @@ def survival():
         print(NoteHistory) # A enlever aide au diagnostique #
         print(KbHistory) # A enlever aide au diagnostique #
             
-        # Demande une réponse à l'utilisateur que le prog met dans une liste
-        RepHistory=list(input('donner la lettre correspondant à cett note : '))
+        survivalWindow.mainloop()
             
         # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
         while check!=i+1 :
@@ -351,10 +389,14 @@ def survival():
                 print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :',scoreSurvival)
                 check=check+1
                 
-            else: # Compte les erreurs
+            elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
                 error=error+1
+                survivalWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+                break                 #Cela évite de continuer la vérification.
+        
         if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
             survivalGameOver()
+        i+=1
 
 ##Définition de la fonction codant pour les meilleurs scores du Survival
 
@@ -381,6 +423,10 @@ def survivalScoreFunc():
     for i in range(sizeListScore):
         printScore.insert(i,listScore[i])
     printScore.pack(fill=BOTH)
+    
+    #Label précisant que la liste est défilable
+    infoDefil=Label(displayScore,text="Il est possible de faire défiler la liste",fg="grey")
+    infoDefil.pack(fill=BOTH)
     
     #Bouton de retour au menu
     menuBack=Button(displayScore,text="Retour au menu",command=displayScore.destroy,bg="grey",activebackground=grisClair)
