@@ -2,7 +2,11 @@
 
 launcher : fait
 
-menu : fait par Antoine + Unlock par Antoine + lock par Quentin
+menu : fait par Antoine
+
+Unlock : fait par Antoine
+
+Lock : fait par Quentin
 
 levels (sons) : Fait par Quentin winsound, a faire ossaudiodev
 
@@ -10,10 +14,12 @@ levels (random + list) : Fait par Quentin
 
 Jokers : fait par Quentin
 
-levels (fenêtre) : A faire par Antoine
+levels (fenêtre) : fait par Antoine
 
-Survival : A faire par Antoine
+Survival : fait par
 
 best : fait par Antoine
+
+debug : fait par Antoine, aidé par Quentin
 
 site : a faire si temps
