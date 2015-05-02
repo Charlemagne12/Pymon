@@ -250,52 +250,110 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
 ## le tuto
 def tutoriel():
     
+    global RepHistory #Ces deux variables doivent être en global pour leur réutilisation avec valider().
+    global reponse    #Elles sont de toute manière réinitialisées a chaque lancement du niveau.
     NoteHistory=[] # Initialise la liste qui collecte les notes sorties précédement
     KbHistory=[] # Initialise la liste qui collecte les lettres attendu pour avoir tous les points
-    RepHistory=[] # Initialise la liste qui collecte les réponses de l'utilisateur
+    RepHistory=[]
+    global reponse
+    reponse=""
     error=0 # Comptabilise les erreurs fait par l'utilisateur
     
-    print ("bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de                                   note, en effet c'est dans cette partie que vous apprendrez les bases avant d'ètre livré à vous même")
-    print ("Pour commencer voyont ensemble à quelle sauce vous allé être mangé les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m")
-    print ("et bien commençons sans tarder")
+    #Création de la fenêtre tutorielWindowP(resentation) 
+    tutorielWindowP=Tk()
+    tutorielWindowP.title("Pymon - Tutoriel")
+    
+    tutorielMessage=Label(tutorielWindowP,text="bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de note, \n en effet c'est dans cette partie que vous apprendrez les bases avant d'être livré à vous même", bg=bleuClair)
+    tutorielMessage.pack(fill=BOTH)
+   
+    tutorielMessage1=Label(tutorielWindowP,text="Pour commencer voyont ensemble à quelle sauce vous allé être mangé \n les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m", bg=bleuClair)
+    tutorielMessage1.pack(fill=BOTH)
+    
+    suiteButton=Button(tutorielWindowP,text="Passons à la suite ",command=tutorielWindowP.destroy)
+    suiteButton.pack()
+    
+    tutorielWindowP.mainloop ()
+    def valider(): #Cette fonction sert pour le bouton "Valider". Elle prend la réponse, la transforme et permet la vérification de la réponse.
+            reponse=answer.get()
+            answer.delete(0,END) #Vide le widget Entry
+            tutorielWindow.destroy() #Pour quitter la fenêtre
     
     for c in range (7): # Boucle qui joue une à une les notes
-        listTuto=['do','re','mi','fa','sol','la','si'] #Liste qui permet d'aider le joueur pour le tutoriel
+        listTuto=['do','re','mi','fa','sol','la','si'] # Liste qui permet d'aider le joueur pour le tutoriel
+        
+        #Création de la fenêtre tutorielWindow 
+        tutorielWindow=Tk()
+        tutorielWindow.title("Pymon - Tutoriel")
+    
+       
+        tutorielMessage4=Label(tutorielWindow, text= "la note joué est un ")
+        tutorielMessage4.pack(fill=BOTH)
+        tutorielMessage5=Label(tutorielWindow, text= listTuto[c])
+        tutorielMessage5.pack(fill=BOTH)
+        tutorielMessage6=Label(tutorielWindow, text= "il faut taper la lettre :")
+        tutorielMessage6.pack(fill=BOTH)
+        tutorielMessage7=Label(tutorielWindow, text= listKeyboard[c])
+        tutorielMessage7.pack(fill=BOTH)
+        
+        answer=Entry(tutorielWindow) #La zone ou la réponse sera saisie
+        answer.pack()
+        
+        validerButton=Button(tutorielWindow,text="Valider",command=valider)
+        validerButton.pack()
         
         winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
-        print (" la note jouée est un ",listTuto[c]," appuyé sur la touche ",listKeyboard[c]) # Affiche les notes joué et les reponses attendu
-    
-    # Réponse de l'utilisateur et juste après vérifie si la réponse est juste
-    
-        reponse=input('donner la lettre correspondant à cett note : ')
-        if listKeyboard[c]==reponse :
-            print('bravo')
-        else :
-            print('hiiinnn faux')
+        
+        tutorielWindow.mainloop()
     
     # Petit récapitulatif dans les conditions normal d'utilisation du jeu
-    print ("Bon allé un petit récapitulatif :) on va faire toutes es note dans l'ordre ")
+    
+
+    
     for c in range (7):
         winsound.PlaySound(listNote_tuto[c],winsound.SND_FILENAME)
         NoteHistory.append(listNote_tuto[c])
         KbHistory.append(listKeyboard[c])
     
-    RepHistory=list(input('donner les lettres correspondant à cette note : '))
+    #Création de la fenêtre
+    tutoRecapWindow=Tk()
+    tutoRecapWindow.title("Pymon - Tutoriel")
+    
+    tutoRecapMessage=Label(tutoRecapWindow,text="Un petit récapitulatif nous allons jouer toutes les notes dans l'ordre \n Bonne chance !",bg=bleuClair)
+    tutoRecapMessage.pack(fill=BOTH)
+    
+    recap=Entry(tutoRecapWindow) #La zone ou la réponse sera saisie
+    recap.pack()
+    
+    def valider1 (): #Cette fonction sert pour le bouton "Valider". Elle prend la réponse, la transforme et permet la vérification de la réponse.
+        reponse=recap.get()
+        global RepHistory #Il faut redéfinir RepHistory comme global ici, sinon on ne peut pas l'utiliser.
+        RepHistory=list(reponse)
+        recap.delete(0,END) #Vide le widget Entry
+        tutorielWindow.quit() #Pour quitter la fenêtre
+        
+    validerButton=Button(tutoRecapWindow,text="Valider",command=valider1)
+    validerButton.pack()
+    
+    tutoRecapWindow.mainloop ()
+    
     
     for j in range (7):
         if KbHistory[j]==RepHistory[j] :
             error+=0 #histoire de pas avoir un if vide, et de limiter les possibles erreurs, on laisse la variable error telle quelle
         else: # Compte les erreurs
             error=error+1
+            tutorielWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+            break                 #Cela évite de continuer la vérification.
     
-    if error==0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
-        levelComplete()
-    else :
+    if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
         gameOver()
-    lock (0)
     
-    #TODO: Fenêtre
-    
+    #Fermeture de la fenêtre à la fin de la boucle for si il a réussi (s'il a raté, la fenêtre se ferme dans le while plus haut)
+    #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
+    else :   
+        levelComplete()
+        lock (0)
+
 ##Le SURVIVAL DE LA MORT
 
 #Fenêtre de game over du survival
