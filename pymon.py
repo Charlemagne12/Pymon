@@ -2,7 +2,7 @@
 #Pymon (c) Antoine Bouquin et Quentin Albertone. Bienvenue dans le code source. Vous avez le droit de le modifier et/ou de le redistribuer en précisant que l'original vient de nous et sans le vendre. Merci.
 
 #-------------- Nota bene :-----------------------
-#Le programme est conçu pour tourner sous Windows uniquement pour l'instant, et Linux est a venir. Les tailles des fenêtres sont conçues pour avoir la dimension parfaite pour Windows 7/Aero désactivé. Ainsi, suivant l'OS/le thème, l'agencement peut ne pas être parfait. Cependant, cela est purement esthétique et n'affecte en rien le fonctionnement global du programme. Bon jeu !
+#Le programme est conçu pour tourner sous Windows uniquement pour l'instant, Linux devait être implanté, mais la documentation sur la librairie destinée a jouer les sons sous Linux (ossaudiodev) est insuffisante. Les tailles des fenêtres sont conçues pour avoir la dimension parfaite pour Windows 7/Aero désactivé. Ainsi, suivant l'OS/le thème, l'agencement peut ne pas être parfait. Cependant, cela est purement esthétique et n'affecte en rien le fonctionnement global du programme. Bon jeu !
 
 ##Importation des modules
 
@@ -32,13 +32,15 @@ bleuClair="#5367ff"
 
 ##Définitions des fonctions permettant de définir l'OS de l'utilisateur
 
+global OSWin #Pour le réutiliser dans le reste du programme
+
 def OSchosenWin():
-    OSWin=True
-    return OSWin
+    global OSWin
+    OSWin=1
     
 def OSchosenUnix():
-    OSWin=False
-    return OSWin
+    global OSWin
+    OSWin=0
 
 ##Définition du launcher
 
@@ -49,9 +51,15 @@ def launch():
     launcher=Tk()
     launcher.title("Pymon launcher")
     
-    def launcherClose():
+    def launcherCloseWin():
         launcher.destroy()
         menu()
+        OSchosenWin()
+        
+    def launcherCloseUnix():
+        launcher.destroy()
+        menu()
+        OSchosenUnix()
 
 #Afin de fermer la fenêtre en ouvrant le menu, on doit définir une fonction codant pour ça, sinon on doit
 #coder la fermeture de la fenêtre en tant que commande sur le bouton, mais dans ce cas là, on doit mettre "menu()"
@@ -62,14 +70,14 @@ def launch():
     OSquestion=Label(launcher,text="Bienvenue dans Pymon ! Choisissez votre OS :",anchor=CENTER,justify=CENTER)
     OSquestion.pack(fill=BOTH)
     
-    unixButton=Button(launcher,text="Windows",command=OSchosenWin and launcherClose,bg="blue",activebackground=bleuClair) 
+    unixButton=Button(launcher,text="Windows",command=launcherCloseWin,bg="blue",activebackground=bleuClair) 
     unixButton.pack(fill=BOTH)
     
 #Ainsi, l'utilisateur ne peut pas lancer le programme sans choisir d'OS 
 #(grâce a la fonction launcherClose que l'on vient de créer).
 #Il peut quitter le launcher manuellement, mais dans ce cas le programme s'arrête.
 
-    winButton=Button(launcher,text="UNIX",command=OSchosenUnix and launcherClose,bg="orange",activebackground=orangeClair)
+    winButton=Button(launcher,text="UNIX",command=launcherCloseUnix,bg="orange",activebackground=orangeClair)
     winButton.pack(fill=BOTH)
     
     #Lancement du launcher
@@ -193,24 +201,24 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
         
             # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
             while sound!=i+1 :
-                print (NoteHistory[sound]) # A enlever aide au diagnostique #
+                #Ici, il devait y avoir "if OSWin==1:" pour lancer le son avec Winsound, ne fonctionnant que sous Windows.
+                #Le problème, c'est qu'on nous dit qu'"OSWin n'est pas défini" (alors qu'il l'est)
                 winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+                #else:
+                    #On comptait utiliser ossaudiodev pour jouer le son sous Linux, mais la documentation étant insuffisante, on n'a pas pu.
+                    #Cependant, nous sommes conscients que le programme ne marche par conséquent qu'avec Windows.
                 sound=sound+1
-            print(NoteHistory) # A enlever aide au diagnostique #
-            print(KbHistory) # A enlever aide au diagnostique #
                 
             levelWindow.mainloop()
             
             # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
             try :
-                while check!=i+1 : # Le décompte des points n'est pas au point 
+                while check!=i+1 :
                     if KbHistory[check]==RepHistory[check] :
-                        print('bravo') # A enlever le bravo fait tache #
                         score=score+100 # Attribution du score afin de débloquer les niveau suivants 
                         check=check+1
                     
-                    elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide           
-                        print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :', )
+                    elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide
                         if score<200 : # Pas de score négatif c'est peu encourageant
                             score=0
                         else :
