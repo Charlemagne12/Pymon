@@ -531,8 +531,8 @@ def menu():
         level1Unlock=True
         level2Unlock=True
         level3Unlock=True
-    # else:
-        # print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
+    else:
+        print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
         
     #Ces fonctions sont appellées par les boutons pour le déblocage des niveaux.
     #Au départ, nous avions fait une fonction qui prenait des paramètres, mais ça ne fonctionnait pas
