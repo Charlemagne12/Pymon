@@ -158,7 +158,6 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
     score=0 # Comptabilise le total des points du joueur le long du niveau
     error=0 # Comptabilise les erreurs fait par l'utilisateur
     reponse=''
-    validation=False
     
     #Création de la fenêtre
     levelWindow=Tk()
@@ -237,8 +236,7 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
     if score>lvlUp :
         levelComplete()
         lock(lvl)
-    else: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
-        levelWindow.destroy()
+    elif score<lvlUp and error==0: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
         tryAgain()
         
 ## le tuto
