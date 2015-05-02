@@ -436,24 +436,19 @@ def survival():
         
         # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
         while sound!=i+1 :
-            print (NoteHistory[sound]) # A enlever aide au diagnostique #
             winsound.PlaySound(NoteHistory[sound],winsound.SND_FILENAME)
             sound=sound+1
-        print(NoteHistory) # A enlever aide au diagnostique #
-        print(KbHistory) # A enlever aide au diagnostique #
             
         survivalWindow.mainloop()
             
         # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
         while check!=i+1 :
             if KbHistory[check]==RepHistory[check] :
-                print('bravo') # A enlever le bravo fait tache #
                 scoreSurvival=scoreSurvival+100 # Attribution du score pour l'enregidtrer plus tard
                 check=check+1
             
             elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide    
                 scoreSurvival=scoreSurvival-200
-                print ('Un trou de mémoire, voila la suite mais vous perdez 200 points ils ne vous en reste que :',scoreSurvival)
                 check=check+1
                 
             elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
@@ -536,8 +531,8 @@ def menu():
         level1Unlock=True
         level2Unlock=True
         level3Unlock=True
-    else:
-        print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
+    # else:
+        # print("C'était marqué dans le readme de pas toucher aux fichiers. Pourquoi vous l'avez fait ?!")
         
     #Ces fonctions sont appellées par les boutons pour le déblocage des niveaux.
     #Au départ, nous avions fait une fonction qui prenait des paramètres, mais ça ne fonctionnait pas
