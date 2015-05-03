@@ -77,8 +77,11 @@ def launch():
 #(grâce a la fonction launcherClose que l'on vient de créer).
 #Il peut quitter le launcher manuellement, mais dans ce cas le programme s'arrête.
 
-    winButton=Button(launcher,text="UNIX",command=launcherCloseUnix,bg="orange",activebackground=orangeClair)
+    winButton=Button(launcher,text="Linux",command=launcherCloseUnix,bg="orange",activebackground=orangeClair)
     winButton.pack(fill=BOTH)
+    
+    warning=Label(launcher,text="Attention !\nLinux ne fonctionne pas pour l'instant.",fg="red")
+    warning.pack()
     
     #Lancement du launcher
     launcher.mainloop()
