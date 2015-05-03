@@ -185,6 +185,15 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
         
     validerButton=Button(levelWindow,text="Valider",command=valider)
     validerButton.pack()
+    
+    #Création d'un bouton de retour au menu. Il provoque l'arrêt du niveau et donc la fait buguer, mais peu importe,
+    #puisque lorsque la fonction se relancera, tout est réinitialisé et elle fonctionne comme normalement.
+    def retourMenu():
+        levelWindow.destroy()
+        menu()
+    
+    menuBack=Button(levelWindow,text="Retourner au menu",command=retourMenu)
+    menuBack.pack()
         
     for i in range (nb): # suivant la difficulté changer le 3 #
         #Evite de relancer la boucle après un game over
@@ -262,10 +271,10 @@ def tutoriel():
     tutorielWindowP=Tk()
     tutorielWindowP.title("Pymon - Tutoriel")
     
-    tutorielMessage=Label(tutorielWindowP,text="bonjour, vous voici dans le premier niveau du pymon,\n un niveau ô combien honorable dans se jeu de reconnaissance de note, \n en effet c'est dans cette partie que vous apprendrez les bases avant d'être livré à vous même", bg=bleuClair)
+    tutorielMessage=Label(tutorielWindowP,text="Bonjour, vous voici dans le tutoriel du Pymon,\nun niveau ô combien honorable dans ce jeu de reconnaissance et mémorisation de notes.\nEn effet, c'est dans cette partie que vous apprendrez les bases avant d'être livré à vous même", bg=bleuClair)
     tutorielMessage.pack(fill=BOTH)
    
-    tutorielMessage1=Label(tutorielWindowP,text="Pour commencer voyont ensemble à quelle sauce vous allé être mangé \n les notes à reconnaitre sont : do, re, mi, fa, sol, la, si et on respectivement comme lettres associé : q, s, d, f, k, l, m", bg=bleuClair)
+    tutorielMessage1=Label(tutorielWindowP,text="Pour commencer voyons ensemble les notes.\nLes notes à reconnaitre sont : do, re, mi, fa, sol, la, si et ont respectivement comme lettres associées : q, s, d, f, k, l, m", bg=bleuClair)
     tutorielMessage1.pack(fill=BOTH)
     
     suiteButton=Button(tutorielWindowP,text="Passons à la suite ",command=tutorielWindowP.destroy)
@@ -285,11 +294,11 @@ def tutoriel():
         tutorielWindow.title("Pymon - Tutoriel")
     
        
-        tutorielMessage4=Label(tutorielWindow, text= "la note joué est un ")
+        tutorielMessage4=Label(tutorielWindow, text= "La note jouée est un ")
         tutorielMessage4.pack(fill=BOTH)
         tutorielMessage5=Label(tutorielWindow, text= listTuto[c])
         tutorielMessage5.pack(fill=BOTH)
-        tutorielMessage6=Label(tutorielWindow, text= "il faut taper la lettre :")
+        tutorielMessage6=Label(tutorielWindow, text= "Il faut taper la lettre :")
         tutorielMessage6.pack(fill=BOTH)
         tutorielMessage7=Label(tutorielWindow, text= listKeyboard[c])
         tutorielMessage7.pack(fill=BOTH)
@@ -317,7 +326,7 @@ def tutoriel():
     tutoRecapWindow=Tk()
     tutoRecapWindow.title("Pymon - Tutoriel")
     
-    tutoRecapMessage=Label(tutoRecapWindow,text="Un petit récapitulatif nous allons jouer toutes les notes dans l'ordre \n Bonne chance !",bg=bleuClair)
+    tutoRecapMessage=Label(tutoRecapWindow,text="Un petit récapitulatif, nous avons jouer toutes les notes dans l'ordre\nBonne chance !",bg=bleuClair)
     tutoRecapMessage.pack(fill=BOTH)
     
     recap=Entry(tutoRecapWindow) #La zone ou la réponse sera saisie
@@ -341,7 +350,7 @@ def tutoriel():
             error+=0 #histoire de pas avoir un if vide, et de limiter les possibles erreurs, on laisse la variable error telle quelle
         else: # Compte les erreurs
             error=error+1
-            tutorielWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+            tutoRecapWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
             break                 #Cela évite de continuer la vérification.
     
     if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
@@ -349,7 +358,8 @@ def tutoriel():
     
     #Fermeture de la fenêtre à la fin de la boucle for si il a réussi (s'il a raté, la fenêtre se ferme dans le while plus haut)
     #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
-    else :   
+    else:
+        tutoRecapWindow.destroy()
         levelComplete()
         lock (0)
 
@@ -422,6 +432,15 @@ def survival():
     validerButton=Button(survivalWindow,text="Valider",command=valider)
     validerButton.pack()
     
+    #Création d'un bouton de retour au menu. Il provoque l'arrêt du niveau et donc la fait buguer, mais peu importe,
+    #puisque lorsque la fonction se relancera, tout est réinitialisé et elle fonctionne comme normalement.
+    def retourMenu():
+        survivalWindow.destroy()
+        menu()
+    
+    menuBack=Button(survivalWindow,text="Retourner au menu",command=retourMenu)
+    menuBack.pack()
+    
     while error==0:
         
         #Variables pour les boucles while plus bas
@@ -435,7 +454,12 @@ def survival():
         
         # Joue la liste des fichiers audios contenant les 'anciennes' et la nouvelle note
         while sound!=i+1 :
-            winsound.PlaySound(NoteHistory[sound],winsound.SND_FILENAME)
+            #Ici, il devait y avoir "if OSWin==1:" pour lancer le son avec Winsound, ne fonctionnant que sous Windows.
+            #Le problème, c'est qu'on nous dit qu'"OSWin n'est pas défini" (alors qu'il l'est)
+            winsound.PlaySound(NoteHistory [sound],winsound.SND_FILENAME)
+            #else:
+                #On comptait utiliser ossaudiodev pour jouer le son sous Linux, mais la documentation étant insuffisante, on n'a pas pu.
+                #Cependant, nous sommes conscients que le programme ne marche par conséquent qu'avec Windows.
             sound=sound+1
             
         survivalWindow.mainloop()
