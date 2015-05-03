@@ -250,6 +250,8 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
     #Fermeture de la fenêtre à la fin de la boucle for si il a réussi (s'il a raté, la fenêtre se ferme dans le while plus haut)
     #En réalité, c'est limite surperflu, cela évite juste de fermer une deuxième fois la fenêtre en sortant de la boucle si
     #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
+    else:
+        levelWindow.destroy()
         
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score>lvlUp :
