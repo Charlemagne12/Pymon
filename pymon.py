@@ -147,12 +147,11 @@ def lock (lvl) :
     unlockingStatus=int(unlockingStatus)
     fichier.close()
     
-    if unlockingStatus<lvl : #s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
+    if unlockingStatus<=lvl : #s'il n'a jamais fais se niveau il faut le faire paser au niveu sup
         lvl=lvl+1
         fichier=open("data/unlock.txt","w")
         fichier.write(str(lvl))
         fichier.close ()
-        levelComplete()
         
 ## Fonction des niveaux
 
