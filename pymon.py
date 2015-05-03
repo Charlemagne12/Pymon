@@ -463,21 +463,26 @@ def survival():
             sound=sound+1
             
         survivalWindow.mainloop()
-            
-        # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
-        while check!=i+1 :
-            if KbHistory[check]==RepHistory[check] :
-                scoreSurvival=scoreSurvival+100 # Attribution du score pour l'enregidtrer plus tard
-                check=check+1
-            
-            elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide    
-                scoreSurvival=scoreSurvival-200
-                check=check+1
+        
+        try:
+            # Compare un à un les éléments des liste contenant la réponse de l'utilisateur et les réponses attendu
+            while check!=i+1 :
+                if KbHistory[check]==RepHistory[check] :
+                    scoreSurvival=scoreSurvival+100 # Attribution du score pour l'enregidtrer plus tard
+                    check=check+1
                 
-            elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
+                elif 'h'==RepHistory[check]: # Vérifie si la liste ne contient pas d'aide    
+                    scoreSurvival=scoreSurvival-200
+                    check=check+1
+                    
+                elif KbHistory[check]!=RepHistory[check]: # Compte les erreurs
+                    error=error+1
+                    survivalWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
+                    break                    #Cela évite de continuer la vérification.
+        except IndexError :
                 error=error+1
-                survivalWindow.destroy() #si une erreur est détectée, on quitte la fenêtre et la boucle for.
-                break                 #Cela évite de continuer la vérification.
+                levelWindow.destroy()
+                break
         
         if error!=0 : # Et n'affiche qu'une page de 'gameOver' pour toutes les erreurs
             survivalGameOver()
