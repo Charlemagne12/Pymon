@@ -255,8 +255,8 @@ def lvlFunc(lvl, ref, nb, lvlUp): # Nombre de note à la fin du niveau, 'ref' es
         
     # Bloc qui permet ou non au joueur d'aller au niveau supérieur grâce à son score
     if score>lvlUp :
-        levelComplete()
         lock(lvl)
+        levelComplete()
     elif score<lvlUp and error==0: # si son score est inférieur au minimum fixé en arguments (lvlUp) et que ce n'est pas du à un game over :
         tryAgain()
         
@@ -365,8 +365,8 @@ def tutoriel():
     #l'utilisateur a raté le niveau. Ca évite juste un message d'erreur mais n'empêche pas le bon fonctionnement du programme.
     else:
         tutoRecapWindow.destroy()
-        levelComplete()
         lock (0)
+        levelComplete()
 
 ##Le SURVIVAL DE LA MORT
 
