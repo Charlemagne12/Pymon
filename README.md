@@ -11,8 +11,8 @@ Cela pourrait entraîner des dysfonctionnements.
 
 Amusez vous bien ! :)
 
-### English README
 ---
+### English README
 
 Pretty sure nobody will ever read this, but anyway.
 
